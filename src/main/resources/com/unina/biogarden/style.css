@@ -1,0 +1,23 @@
+.combo-box-popup .list-view {
+    -fx-background-color: #fef9db;
+    -fx-border-radius: 10px;
+}
+
+.button:hover{
+    -fx-cursor: hand;
+}
+
+.combo-box-popup .list-view .list-cell {
+    -fx-background-color: #fef9db;
+    -fx-text-fill: #388e3c;
+}
+
+.combo-box-popup .list-view .list-cell:hover {
+    -fx-background-color: rgba(56, 142, 60, 0.09); /* leggerissimo verde trasparente */
+    -fx-text-fill: #388e3c;
+}
+
+.combo-box-popup .list-view .list-cell:selected {
+    -fx-background-color: #c8e6c9;
+    -fx-text-fill: #1b5e20;
+}
