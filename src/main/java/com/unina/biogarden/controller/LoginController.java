@@ -56,7 +56,14 @@ public class LoginController {
         }
 
         System.out.println("Login effettuato con successo per l'utente: " + email);
-        // TODO: Implement navigation to the main application view upon successful login
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/unina/biogarden/dashboard-view.fxml"));
+            Stage stage = (Stage) emailField.getScene().getWindow();
+            Utils.setSceneWithStylesheet(stage, loader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

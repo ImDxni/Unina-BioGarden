@@ -42,7 +42,7 @@
                 </items>
             </ComboBox>
 
-            <PasswordField fx:id="passwordField" promptText="Password" style="-fx-background-radius: 12; -fx-background-color: #c8e6c9; -fx-border-color: transparent;" onAction="#onRegister"/>
+            <PasswordField fx:id="passwordField" onAction="#onRegister" promptText="Password" style="-fx-background-radius: 12; -fx-background-color: #c8e6c9; -fx-border-color: transparent;" />
             <Label fx:id="errorLabel" textFill="#d72525" />
 
             <Button fx:id="registerButton" onMouseClicked="#onRegister" style="-fx-background-color: #43a047; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 12;" text="Registrati" />

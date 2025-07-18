@@ -21,3 +21,31 @@
     -fx-background-color: #c8e6c9;
     -fx-text-fill: #1b5e20;
 }
+
+
+/*
+Sidebar
+ */
+
+.menu-item {
+    -fx-background-color: transparent;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+/* Stato selezionato/attivo */
+.menu-item.selected {
+    -fx-background-color: #f4f4f4;
+    -fx-background-radius: 8;
+}
+
+/* Testo normale */
+.menu-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: #222;
+}
+
+/* Testo selezionato */
+.menu-label.selected {
+    -fx-font-weight: bold;
+}

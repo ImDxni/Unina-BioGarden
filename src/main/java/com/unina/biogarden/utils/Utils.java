@@ -104,5 +104,6 @@ public class Utils {
         Scene scene = new Scene(root);
         scene.getStylesheets().add(BioGarden.class.getResource("/com/unina/biogarden/style.css").toExternalForm());
         stage.setScene(scene);
+        stage.centerOnScreen();
     }
 }
