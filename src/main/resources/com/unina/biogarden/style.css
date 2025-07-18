@@ -99,3 +99,36 @@ TABELLE
     -fx-text-fill: #444;
     -fx-padding: 0 4 0 4;
 }
+
+/* Allinea il testo al centro in tutte le celle delle colonne */
+.jfx-tree-table-view .tree-table-row-cell .jfx-tree-table-cell {
+    -fx-alignment: CENTER !important;
+}
+
+/* Allinea il testo nell'header della colonna */
+.jfx-tree-table-view .column-header .label {
+    -fx-alignment: CENTER !important;
+}
+
+
+/* LOTTI */
+
+/* Stile di default per il lotto */
+.lot-pane {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 6, 0, 0, 2);
+    -fx-cursor: hand;
+}
+
+/* Stile per il lotto selezionato */
+.lot-pane.selected {
+    -fx-background-color: #e8f5e9; /* Un verde molto chiaro */
+    -fx-border-color: #43a047;   /* Il verde principale */
+    -fx-border-width: 2;         /* Bordo più spesso */
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 3); /* Ombra più pronunciata */
+}

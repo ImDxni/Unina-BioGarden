@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
+<?import com.jfoenix.controls.JFXTreeTableColumn?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.FlowPane?>
+
+<VBox spacing="32.0"
+      fx:controller="com.unina.biogarden.controller.side.LotsController"
+      xmlns="http://javafx.com/javafx/24.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      style="-fx-background-color: #f7f7f7; -fx-padding: 32 48 32 48;">
+
+    <HBox alignment="CENTER_LEFT" spacing="16">
+        <Label text="Lotti"
+               style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-font-family: 'Inter', Arial, sans-serif;"/>
+        <Pane HBox.hgrow="ALWAYS"/>
+        <JFXButton text="Nuovo Lotto"
+                   style="-fx-background-color: #43a047; -fx-text-fill: #fff; -fx-font-weight: 600; -fx-background-radius: 8; -fx-pref-width: 140px; -fx-pref-height: 40px; -fx-font-size: 14px;"/>
+    </HBox>
+
+    <HBox spacing="40" VBox.vgrow="ALWAYS">
+        <VBox spacing="16" prefWidth="280" VBox.vgrow="ALWAYS"
+              style="-fx-background-color: #ffffff; -fx-background-radius: 12; -fx-border-color: #e0e0e0; -fx-border-radius: 12; -fx-padding: 16;">
+            <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+                <VBox fx:id="lotsContainer" prefWidth="260" spacing="10"
+                      style="-fx-background-color: #ffffff; -fx-padding: 0 0 16 0;"/>
+            </ScrollPane>
+        </VBox>
+
+        <VBox fx:id="projectsPerLotSection" spacing="16" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
+            <Label text="Progetti attivi per il lotto selezionato"
+                   style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-font-family: 'Inter', Arial;"/>
+
+            <JFXTreeTableView fx:id="projectsPerLotTable" VBox.vgrow="ALWAYS"
+                              style="-fx-background-color: #fff; -fx-background-radius: 12; -fx-border-color: #e0e0e0; -fx-border-radius: 12;">
+                <columns>
+                    <JFXTreeTableColumn fx:id="projNameCol" text="Nome"/>
+                    <JFXTreeTableColumn fx:id="projStartCol" text="Data Inizio"/>
+                    <JFXTreeTableColumn fx:id="projEndCol" text="Data Fine"/>
+                    <JFXTreeTableColumn fx:id="projActionsCol" text="Azioni"/>
+                </columns>
+            </JFXTreeTableView>
+        </VBox>
+    </HBox>
+
+</VBox>

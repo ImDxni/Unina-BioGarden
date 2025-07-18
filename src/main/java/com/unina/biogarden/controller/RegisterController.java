@@ -1,11 +1,10 @@
 package com.unina.biogarden.controller;
 
-import com.unina.biogarden.dao.UtenteDao;
+import com.unina.biogarden.dao.UtenteDAO;
 import com.unina.biogarden.exceptions.UtenteEsistenteException;
 import com.unina.biogarden.utils.Utils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
@@ -14,7 +13,7 @@ import java.io.IOException;
 /**
  * Controller for the user registration view.
  * This class handles user input for registration, validates the data,
- * attempts to register a new user via {@link UtenteDao}, and manages navigation
+ * attempts to register a new user via {@link UtenteDAO}, and manages navigation
  * back to the login screen.
  */
 public class RegisterController {
@@ -65,7 +64,7 @@ public class RegisterController {
         });
 
         // Custom button cell for the ComboBox to style the selected item display
-        tipologiaCombo.setButtonCell(new ListCell<String>() {
+        tipologiaCombo.setButtonCell(new ListCell<>() {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -87,14 +86,14 @@ public class RegisterController {
 
     /**
      * Handles the action when the register button is pressed.
-     * It validates all input fields, attempts to register the user through {@link UtenteDao},
+     * It validates all input fields, attempts to register the user through {@link UtenteDAO},
      * and displays error messages if validation fails or if the user already exists.
      */
     @FXML
     private void onRegister() {
         errorLabel.setVisible(false);
 
-        UtenteDao userDao = new UtenteDao();
+        UtenteDAO userDao = new UtenteDAO();
 
         String nome = nomeField.getText();
         String cognome = cognomeField.getText();
@@ -118,7 +117,8 @@ public class RegisterController {
         try{
             userDao.registerUser(nome,cognome,email,password,tipo);
             System.out.println("Utente registrato!");
-            // TODO: Navigate to a success screen or login screen upon successful registration
+
+            onLoginLink();
         }catch(UtenteEsistenteException ex){
             errorLabel.setVisible(true);
             errorLabel.setText("Esiste già un utente con questo indirizzo");

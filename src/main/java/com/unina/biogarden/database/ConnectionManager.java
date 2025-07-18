@@ -16,10 +16,10 @@ public class ConnectionManager {
     static {
         try {
             HikariConfig config = new HikariConfig();
-            config.setJdbcUrl("jdbc:mysql://localhost:3306/unina_biogarden?useSSL=false&serverTimezone=UTC");
-            config.setUsername("root");
-            config.setPassword(""); // senza password
-            config.setDriverClassName("com.mysql.cj.jdbc.Driver");
+            config.setJdbcUrl("jdbc:postgresql://localhost:5432/BioGarden");
+            config.setUsername("postgres");
+            config.setPassword("admin");
+            config.setDriverClassName("org.postgresql.Driver");
 
             config.setMaximumPoolSize(10);
             config.setConnectionTimeout(10000);

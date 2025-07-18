@@ -5,6 +5,7 @@ import com.unina.biogarden.dto.UtenteDTO;
 import com.unina.biogarden.exceptions.LoginFallitoException;
 import com.unina.biogarden.exceptions.UtenteEsistenteException;
 import com.unina.biogarden.utils.Utils;
+import org.postgresql.util.PGobject;
 
 import javax.sql.DataSource;
 import java.sql.CallableStatement;
@@ -17,47 +18,47 @@ import java.sql.SQLException;
  * This class provides methods for user registration and login, interacting with the database
  * through a connection pool managed by {@link ConnectionManager}.
  */
-public class UtenteDao {
+public class UtenteDAO {
     private final DataSource dataSource = ConnectionManager.getDataSource();
 
     /**
      * Registers a new user in the database.
      * This method encrypts the password before storing it and calls a stored procedure to handle the insertion.
      *
-     * @param nome The first name of the user.
-     * @param cognome The last name of the user.
-     * @param email The email address of the user (must be unique).
+     * @param nome     The first name of the user.
+     * @param cognome  The last name of the user.
+     * @param email    The email address of the user (must be unique).
      * @param password The plain-text password of the user.
-     * @param tipo The type or role of the user.
-     * @return An {@link UtenteDTO} representing the newly registered user, including their generated ID.
+     * @param tipo     The type or role of the user.
      * @throws UtenteEsistenteException If a user with the provided email already exists.
-     * @throws RuntimeException If a general SQL error occurs during registration.
+     * @throws RuntimeException         If a general SQL error occurs during registration.
      */
-    public UtenteDTO registerUser(String nome, String cognome, String email, String password, String tipo) throws UtenteEsistenteException {
-        int id = 1;
-
+    public void registerUser(String nome, String cognome, String email, String password, String tipo) throws UtenteEsistenteException {
         String hashedPassword = Utils.encryptPassword(password);
 
         try(Connection conn = dataSource.getConnection()){
-            CallableStatement stmt = conn.prepareCall("{call registraUtente(?, ?, ?, ?, ?,?)}");
+            CallableStatement stmt = conn.prepareCall("{ ? = call RegistraUtente(?, ?, ?, ?, ?::TipoUtente) }");
 
-            stmt.setString(1, nome);
-            stmt.setString(2, cognome);
-            stmt.setString(3, email);
-            stmt.setString(4, hashedPassword);
-            stmt.setString(5, tipo);
-            stmt.registerOutParameter(6, java.sql.Types.INTEGER);
+            stmt.registerOutParameter(1, java.sql.Types.INTEGER); // output
+            stmt.setString(2, nome);
+            stmt.setString(3, cognome);
+            stmt.setString(4, email);
+            stmt.setString(5, hashedPassword);  // hashed password
+
+            PGobject tipoUtenteObj = new PGobject();
+            tipoUtenteObj.setType("TipoUtente");
+            tipoUtenteObj.setValue(tipo.toLowerCase());
+
+            stmt.setObject(6, tipoUtenteObj);
+
             stmt.executeUpdate();
-            id = stmt.getInt(6);
         }catch(SQLException ex) {
-            if (ex.getSQLState().equals("45000")) {
+            if (ex.getSQLState().equalsIgnoreCase("P0001")) {
                 throw new UtenteEsistenteException("Utente con email " + email + " già esistente");
             } else {
                 throw new RuntimeException("Errore durante la registrazione di utente ", ex);
             }
         }
-
-        return new UtenteDTO(id, nome, cognome, email, password, tipo);
     }
 
     /**

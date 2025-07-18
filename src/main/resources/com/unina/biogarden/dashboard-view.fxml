@@ -45,7 +45,7 @@
                         </ImageView>
                         <Label styleClass="menu-label" text="Progetti" />
                     </HBox>
-                    <HBox onMouseClicked="#changePage" spacing="12" styleClass="menu-item">
+                    <HBox fx:id="lots" onMouseClicked="#changePage" spacing="12" styleClass="menu-item">
                         <ImageView fitHeight="22" fitWidth="22">
                             <image>
                                 <Image url="@icons/lots.png" />
@@ -53,7 +53,7 @@
                         </ImageView>
                         <Label styleClass="menu-label" text="Lotti" />
                     </HBox>
-                    <HBox onMouseClicked="#changePage" spacing="12" styleClass="menu-item">
+                    <HBox fx:id="crops"  onMouseClicked="#changePage" spacing="12" styleClass="menu-item">
                         <ImageView fitHeight="22" fitWidth="22">
                             <image>
                                 <Image url="@icons/crops.png" />

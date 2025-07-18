@@ -1,12 +1,11 @@
 package com.unina.biogarden.controller;
 
-import com.unina.biogarden.dao.UtenteDao;
+import com.unina.biogarden.dao.UtenteDAO;
 import com.unina.biogarden.dto.UtenteDTO;
 import com.unina.biogarden.session.Session;
 import com.unina.biogarden.utils.Utils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -32,13 +31,13 @@ public class LoginController {
 
     /**
      * Handles the action when the login button is pressed.
-     * It validates input fields, attempts to log in the user using {@link UtenteDao},
+     * It validates input fields, attempts to log in the user using {@link UtenteDAO},
      * and displays appropriate error messages or proceeds with successful login.
      */
     @FXML
     private void onLogin() {
         errorLabel.setVisible(false);
-        UtenteDao userDao = new UtenteDao();
+        UtenteDAO userDao = new UtenteDAO();
 
         String email = emailField.getText();
         String password = passwordField.getText();
