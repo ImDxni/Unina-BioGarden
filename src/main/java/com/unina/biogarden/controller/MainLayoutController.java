@@ -1,5 +1,7 @@
 package com.unina.biogarden.controller;
 
+import com.unina.biogarden.session.Session;
+import com.unina.biogarden.utils.Utils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -7,6 +9,9 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class MainLayoutController {
 
@@ -20,9 +25,11 @@ public class MainLayoutController {
         HBox item = getMenuItemFromEvent(mouseEvent);
         if (item != null) {
             switchActiveItem(item);
-            String fxmlFile = item.getId() + ".fxml"; // Assuming the FXML files are named after the IDs of the menu items
+            String fxmlFile = item.getId() + "-view.fxml"; // Assuming the FXML files are named after the IDs of the menu items
+            System.out.println(fxmlFile);
             try {
-                Node newContent = FXMLLoader.load(getClass().getResource(fxmlFile));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/unina/biogarden/"+fxmlFile));
+                Node newContent = loader.load();
                 mainContent.getChildren().clear();
                 mainContent.getChildren().add(newContent);
             } catch (Exception e) {
@@ -66,7 +73,15 @@ public class MainLayoutController {
     }
 
     public void onClose() {
-        //TODO handle close action, e.g., show a confirmation dialog or save state
+        Session.logout();
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/unina/biogarden/login-view.fxml"));
+            Stage stage = (Stage) mainContent.getScene().getWindow();
+            Utils.setSceneWithStylesheet(stage, loader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

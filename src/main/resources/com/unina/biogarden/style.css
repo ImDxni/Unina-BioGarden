@@ -49,3 +49,53 @@ Sidebar
 .menu-label.selected {
     -fx-font-weight: bold;
 }
+
+
+/*
+TABELLE
+ */
+
+.jfx-tree-table-view {
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+    -fx-background-color: #fff;
+    -fx-border-color: #ededed;
+    -fx-table-cell-border-color: #ededed;
+}
+
+.jfx-tree-table-view .column-header-background {
+    -fx-background-color: #fff;
+    -fx-border-color: #ededed;
+    -fx-border-width: 0 0 1 0;
+}
+
+.jfx-tree-table-view .table-row-cell {
+    -fx-background-color: #fff;
+    -fx-font-size: 15px;
+}
+
+.jfx-tree-table-view .table-row-cell:selected {
+    -fx-background-color: #f4f4f4;
+}
+
+.jfx-tree-table-view .column-header {
+    -fx-padding: 3 0 3 0;   /* top, right, bottom, left */
+    -fx-min-height: 24px;
+    -fx-pref-height: 24px;
+    -fx-max-height: 20px;   /* Puoi abbassare a piacere */
+    -fx-border-radius: 14 14 0 0;
+    -fx-background-radius: 14 14 0 0;
+}
+.jfx-tree-table-view .column-header-background {
+    -fx-border-width: 0;
+    -fx-border-color: transparent;
+    -fx-background-insets: 0;
+}
+
+/* Riduci font */
+.jfx-tree-table-view .column-header .label {
+    -fx-font-size: 13px;  /* o 12px */
+    -fx-font-weight: 600;
+    -fx-text-fill: #444;
+    -fx-padding: 0 4 0 4;
+}

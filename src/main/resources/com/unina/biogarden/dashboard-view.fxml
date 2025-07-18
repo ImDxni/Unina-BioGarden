@@ -37,7 +37,7 @@
                         </ImageView>
                         <Label styleClass="menu-label" text="Dashboard" />
                     </HBox>
-                    <HBox onMouseClicked="#changePage" spacing="12" styleClass="menu-item">
+                    <HBox fx:id="projects" onMouseClicked="#changePage" spacing="12" styleClass="menu-item">
                         <ImageView fitHeight="22" fitWidth="22">
                             <image>
                                 <Image url="@icons/projects.png" />

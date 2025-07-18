@@ -1,6 +1,8 @@
 package com.unina.biogarden.controller;
 
 import com.unina.biogarden.dao.UtenteDao;
+import com.unina.biogarden.dto.UtenteDTO;
+import com.unina.biogarden.session.Session;
 import com.unina.biogarden.utils.Utils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -47,13 +49,16 @@ public class LoginController {
             return;
         }
 
+        UtenteDTO user;
         try {
-            userDao.loginUser(email, password);
+            user = userDao.loginUser(email, password);
         } catch (Exception e) {
             errorLabel.setText("Login fallito: " + e.getMessage());
             errorLabel.setVisible(true);
             return;
         }
+
+        Session.login(user);
 
         System.out.println("Login effettuato con successo per l'utente: " + email);
 
