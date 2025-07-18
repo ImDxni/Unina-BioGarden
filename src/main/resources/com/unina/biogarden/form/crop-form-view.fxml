@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+
+<VBox spacing="16.0" alignment="TOP_CENTER"
+      xmlns="http://javafx.com/javafx/24.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.unina.biogarden.controller.form.CreateCropFormController"
+      style="-fx-background-color: #fff; -fx-padding: 24;">
+
+    <Label text="Crea Nuova Coltura" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+
+    <JFXTextField fx:id="cropNameField" promptText="Nome Coltura" style="-fx-pref-width: 300px;"/>
+
+    <JFXTextField fx:id="growthTimeField" promptText="Giorni di Maturazione" style="-fx-pref-width: 300px;"/>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT" VBox.vgrow="ALWAYS">
+        <JFXButton text="Annulla"
+                   onAction="#cancel"
+                   style="-fx-background-color: #f44336; -fx-text-fill: #fff; -fx-font-weight: 600; -fx-background-radius: 8; -fx-pref-width: 100px; -fx-pref-height: 36px;"/>
+        <JFXButton text="Crea"
+                   onAction="#handleCreate"
+                   style="-fx-background-color: #43a047; -fx-text-fill: #fff; -fx-font-weight: 600; -fx-background-radius: 8; -fx-pref-width: 100px; -fx-pref-height: 36px;"/>
+    </HBox>
+</VBox>

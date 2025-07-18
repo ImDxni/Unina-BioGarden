@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<StackPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.unina.biogarden.controller.form.NewLotFormController">
+    <VBox alignment="CENTER" prefHeight="250.0" prefWidth="400.0" spacing="20.0"
+          style="-fx-background-color: #ffffff; -fx-padding: 20; -fx-background-radius: 12; -fx-border-color: #e0e0e0; -fx-border-radius: 12;">
+        <children>
+            <Label text="Crea Nuovo Lotto">
+                <font>
+                    <Font name="Inter Bold" size="20.0" />
+                </font>
+                <VBox.margin>
+                    <Insets bottom="10.0" />
+                </VBox.margin>
+            </Label>
+            <JFXTextField fx:id="nameField" labelFloat="true" promptText="Nome Lotto">
+                <VBox.margin>
+                    <Insets left="20.0" right="20.0" />
+                </VBox.margin>
+            </JFXTextField>
+            <JFXTextField fx:id="areaField" labelFloat="true" promptText="Area (m²)">
+                <VBox.margin>
+                    <Insets left="20.0" right="20.0" />
+                </VBox.margin>
+            </JFXTextField>
+            <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                <children>
+                    <JFXButton onAction="#cancel" text="Annulla"
+                               style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-weight: 600; -fx-background-radius: 8; -fx-pref-width: 90px; -fx-pref-height: 35px;" />
+                    <JFXButton onAction="#handleCreate" text="Crea"
+                               style="-fx-background-color: #43a047; -fx-text-fill: white; -fx-font-weight: 600; -fx-background-radius: 8; -fx-pref-width: 90px; -fx-pref-height: 35px;" />
+                </children>
+                <VBox.margin>
+                    <Insets top="10.0" />
+                </VBox.margin>
+            </HBox>
+        </children>
+    </VBox>
+</StackPane>

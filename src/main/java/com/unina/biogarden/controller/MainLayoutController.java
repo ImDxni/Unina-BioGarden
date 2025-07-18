@@ -23,18 +23,16 @@ public class MainLayoutController {
 
     public void changePage(MouseEvent mouseEvent) {
         HBox item = getMenuItemFromEvent(mouseEvent);
-        if (item != null) {
+        if (item != null && !item.equals(activeItem)) {
             switchActiveItem(item);
-            String fxmlFile = item.getId() + "-view.fxml"; // Assuming the FXML files are named after the IDs of the menu items
-            System.out.println(fxmlFile);
+            String fxmlFile = item.getId() + "-view.fxml";
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/unina/biogarden/"+fxmlFile));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/unina/biogarden/side/"+fxmlFile));
                 Node newContent = loader.load();
                 mainContent.getChildren().clear();
                 mainContent.getChildren().add(newContent);
             } catch (Exception e) {
                 e.printStackTrace();
-                // Handle the error, e.g., show an alert or log it
             }
         }
     }

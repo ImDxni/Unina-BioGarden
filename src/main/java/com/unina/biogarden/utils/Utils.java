@@ -3,6 +3,7 @@ package com.unina.biogarden.utils;
 import com.unina.biogarden.BioGarden;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 import javax.crypto.SecretKeyFactory;
@@ -105,5 +106,14 @@ public class Utils {
         scene.getStylesheets().add(BioGarden.class.getResource("/com/unina/biogarden/style.css").toExternalForm());
         stage.setScene(scene);
         stage.centerOnScreen();
+    }
+
+
+    public static void showAlert(Alert.AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

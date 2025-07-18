@@ -1,0 +1,57 @@
+package com.unina.biogarden.dao;
+
+import com.unina.biogarden.database.ConnectionManager;
+import com.unina.biogarden.dto.ColturaDTO;
+
+import javax.sql.DataSource;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+public class ColturaDAO {
+
+    private final DataSource dataSource = ConnectionManager.getDataSource();
+    public ColturaDTO creaColtura(String tipologia, int tempoMaturazione) {
+        try (Connection conn = dataSource.getConnection()) {
+
+            CallableStatement stmnt = conn.prepareCall("{ ? = call CreaColtura(?, ?) }");
+            stmnt.registerOutParameter(1, java.sql.Types.INTEGER); // Parametro di ritorno (ID)
+            stmnt.setString(2, tipologia);
+            stmnt.setInt(3, tempoMaturazione);
+            stmnt.execute();
+
+            int idColtura = stmnt.getInt(1);
+            return new ColturaDTO(idColtura, tipologia, tempoMaturazione);
+
+        } catch (SQLException ex) {
+            if (ex.getSQLState().equalsIgnoreCase("23505")) {
+                throw new IllegalStateException("La coltura '" + tipologia + "' esiste già.");
+            } else {
+                throw new RuntimeException("Errore durante la creazione della coltura: " + ex.getMessage(), ex);
+            }
+        }
+    }
+
+    public Collection<ColturaDTO> fetchAllColture() {
+        Set<ColturaDTO> colture = new HashSet<>();
+        try (Connection conn = dataSource.getConnection()) {
+            PreparedStatement stmnt = conn.prepareStatement("SELECT id, tipologia, tempomaturazione FROM Coltura");
+            ResultSet rs = stmnt.executeQuery();
+            while (rs.next()) {
+                colture.add(new ColturaDTO(
+                        rs.getInt("id"),
+                        rs.getString("tipologia"),
+                        rs.getInt("tempomaturazione")
+                ));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return colture;
+    }
+}

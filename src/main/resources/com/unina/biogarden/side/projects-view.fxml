@@ -19,21 +19,15 @@
         <Label text="Progetti"
                style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-font-family: 'Inter', Arial, sans-serif;"/>
         <Pane HBox.hgrow="ALWAYS"/>
-        <JFXButton text="Nuovo Progetto"
+        <JFXButton text="Nuovo Progetto"  onAction="#handleNewProjectButton"
                    style="-fx-background-color: #43a047; -fx-text-fill: #fff; -fx-font-weight: 600; -fx-background-radius: 8; -fx-pref-width: 120px; -fx-pref-height: 36px;"/>
     </HBox>
-
-    <HBox spacing="12">
-        <JFXComboBox promptText="Tutti i lotti" style="-fx-background-radius: 8; -fx-background-color: #f4f4f4; -fx-pref-width: 110px;"/>
-    </HBox>
-
     <JFXTreeTableView fx:id="projectTable" prefHeight="480" style="-fx-background-radius: 14; -fx-border-radius: 14; -fx-table-cell-border-color: #ededed;">
         <columns>
             <JFXTreeTableColumn fx:id="nameCol" text="Nome" />
             <JFXTreeTableColumn fx:id="lotCol" text="Lotto" />
             <JFXTreeTableColumn fx:id="seasonCol" text="Stagione" />
             <JFXTreeTableColumn fx:id="statusCol" text="Stato" />
-            <JFXTreeTableColumn fx:id="actionsCol" text="Azioni" />
         </columns>
     </JFXTreeTableView>
 </VBox>

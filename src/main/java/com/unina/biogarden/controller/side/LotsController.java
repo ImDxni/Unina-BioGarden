@@ -2,25 +2,38 @@ package com.unina.biogarden.controller.side;
 
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import com.unina.biogarden.controller.form.NewLotFormController;
 import com.unina.biogarden.dao.LottoDAO;
+import com.unina.biogarden.dao.ProgettoDAO;
 import com.unina.biogarden.dto.LottoDTO;
+import com.unina.biogarden.dto.ProgettoDTO;
 import com.unina.biogarden.models.ProjectRow;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Label;
-import javafx.beans.property.Property;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TreeTableColumn;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
+import java.io.IOException;
 import java.util.Collection;
-import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import static com.unina.biogarden.utils.Utils.showAlert;
 
 public class LotsController {
     @FXML
@@ -31,80 +44,102 @@ public class LotsController {
 
     @FXML
     private JFXTreeTableView<ProjectRow> projectsPerLotTable;
-
     @FXML
-    private JFXTreeTableColumn<ProjectRow, String> projNameCol;
-
+    private JFXTreeTableColumn<ProjectRow, String> nameCol;
     @FXML
-    private JFXTreeTableColumn<ProjectRow, String> projStartCol;
-
+    private JFXTreeTableColumn<ProjectRow, String> lotCol;
     @FXML
-    private JFXTreeTableColumn<ProjectRow, String> projEndCol;
-
+    private JFXTreeTableColumn<ProjectRow, String> seasonCol;
     @FXML
-    private JFXTreeTableColumn<ProjectRow, String> projActionsCol;
+    private JFXTreeTableColumn<ProjectRow, String> statusCol;
+
 
     private final LottoDAO DAO = new LottoDAO();
+    private final ProgettoDAO progettoDAO = new ProgettoDAO();
     private Pane selectedLotPane = null;
 
     @FXML
     public void initialize() {
         projectsPerLotTable.setColumnResizePolicy(JFXTreeTableView.CONSTRAINED_RESIZE_POLICY);
-        initCellFactory();
+        ProjectRow.initCellFactory(nameCol, lotCol, seasonCol, statusCol);
+
+        Platform.runLater(() -> {
+            loadLotsIntoSidebar();
+        });
+
+        projectsPerLotSection.setVisible(false);
+        projectsPerLotSection.setManaged(false);
+
+    }
+
+    private void loadProjectsForLot(LottoDTO lot) {
+        if (lot == null) {
+            projectsPerLotSection.setVisible(false);
+            projectsPerLotSection.setManaged(false);
+            return;
+        }
+
+        try {
+            Collection<ProgettoDTO> progettiDTO = progettoDAO.fetchProjectsByLot(lot.id());
+            ObservableList<ProjectRow> data = progettiDTO.stream()
+                    .map(p -> new ProjectRow(
+                            p.nome(),
+                            p.idLotto(),
+                            p.dataInizio(),
+                            p.dataFine()
+                    ))
+                    .collect(Collectors.toCollection(FXCollections::observableArrayList));
+
+            TreeItem<ProjectRow> projectRoot = new RecursiveTreeItem<>(data, RecursiveTreeObject::getChildren);
+            projectsPerLotTable.setRoot(projectRoot);
+            projectsPerLotTable.setShowRoot(false);
+
+            projectsPerLotSection.setVisible(true);
+            projectsPerLotSection.setManaged(true);
+
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Errore Caricamento Progetti", "Impossibile caricare i progetti per il lotto selezionato.");
+            e.printStackTrace();
+            projectsPerLotSection.setVisible(false);
+            projectsPerLotSection.setManaged(false);
+        }
+    }
+
+    private void loadLotsIntoSidebar() {
+        lotsContainer.getChildren().clear(); // Pulisci i lotti esistenti
+        selectedLotPane = null;
 
         Collection<LottoDTO> lots = DAO.getAllLots();
 
-        // Variabile per tenere traccia del primo lotto
         LottoDTO firstLot = null;
         Pane firstLotPane = null;
-
 
         for (LottoDTO lot : lots) {
             Pane box = createLotBox(lot);
             lotsContainer.getChildren().add(box);
 
-            // Se è il primo lotto, memorizzalo
             if (firstLot == null) {
                 firstLot = lot;
                 firstLotPane = box;
             }
         }
 
-        // Seleziona automaticamente il primo lotto se presente
         if (firstLot != null) {
-            // Applica la classe 'selected' al primo lotto
             firstLotPane.getStyleClass().add("selected");
-            selectedLotPane = firstLotPane; // Imposta come lotto attualmente selezionato
-
-            // Carica i progetti per il primo lotto
+            selectedLotPane = firstLotPane;
             loadProjectsForLot(firstLot);
+
         } else {
-            // Se non ci sono lotti, assicurati che la sezione progetti sia nascosta
             projectsPerLotSection.setVisible(false);
             projectsPerLotSection.setManaged(false);
         }
-    }
-
-    private void loadProjectsForLot(LottoDTO lot) {
-        ObservableList<ProjectRow> data = FXCollections.observableArrayList(
-                new ProjectRow("Progetto Ortaggi per " + lot.nome(), "Lotto 1", "01/03/2025", "30/06/2025", "In Corso", "Vedi"),
-                new ProjectRow("Progetto Frutta per " + lot.nome(), "Lotto 2", "15/04/2025", "15/08/2025", "Pianificazione", "Vedi"),
-                new ProjectRow("Progetto Fiori per " + lot.nome(), "Lotto 3", "01/05/2025", "31/07/2025", "Completato", "Vedi")
-        );
-
-        TreeItem<ProjectRow> projectRoot = new RecursiveTreeItem<>(data, RecursiveTreeObject::getChildren);
-        projectsPerLotTable.setRoot(projectRoot);
-        projectsPerLotTable.setShowRoot(false);
-
-        projectsPerLotSection.setVisible(true);
-        projectsPerLotSection.setManaged(true);
     }
 
     private Pane createLotBox(LottoDTO lot) {
         Label name = new Label(lot.nome());
         name.setStyle("-fx-font-weight: 600; -fx-font-size: 14px; -fx-text-fill: #222;");
 
-        Label area = new Label(lot.area()+" km²");
+        Label area = new Label(lot.area() + " km²");
         area.setStyle("-fx-font-size: 12px; -fx-text-fill: #666;");
 
         VBox content = new VBox(name, area);
@@ -129,6 +164,38 @@ public class LotsController {
         return box;
     }
 
+
+    @FXML
+    private void handleNewLotCreation(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/unina/biogarden/form/lot-form-view.fxml")); // Percorso corretto
+            Parent root = loader.load();
+            root.requestLayout();
+            root.layout();
+            NewLotFormController formController = loader.getController();
+
+            formController.setOnLotCreated(() -> {
+                Platform.runLater(this::loadLotsIntoSidebar);
+            });
+
+            Stage stage = new Stage();
+            stage.setTitle("Crea Nuovo Lotto");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+            stage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Errore");
+            alert.setHeaderText("Impossibile aprire il form di creazione lotto");
+            alert.setContentText("Si è verificato un errore durante il caricamento del modulo. Controlla il percorso del file FXML.");
+            alert.showAndWait();
+        }
+    }
+
+
     private Callback<TreeTableColumn.CellDataFeatures<ProjectRow, String>, ObservableValue<String>> getSafeCellValueFactory(
             Function<ProjectRow, SimpleStringProperty> extractor) {
         return param -> {
@@ -140,10 +207,4 @@ public class LotsController {
         };
     }
 
-    private void initCellFactory() {
-        projNameCol.setCellValueFactory(getSafeCellValueFactory(ProjectRow::nameProperty));
-        projStartCol.setCellValueFactory(getSafeCellValueFactory(ProjectRow::startDateProperty));
-        projEndCol.setCellValueFactory(getSafeCellValueFactory(ProjectRow::endDateProperty));
-        projActionsCol.setCellValueFactory(getSafeCellValueFactory(ProjectRow::actionsProperty));
-    }
 }

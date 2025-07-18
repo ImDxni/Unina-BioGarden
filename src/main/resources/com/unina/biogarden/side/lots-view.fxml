@@ -22,7 +22,7 @@
         <Label text="Lotti"
                style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-font-family: 'Inter', Arial, sans-serif;"/>
         <Pane HBox.hgrow="ALWAYS"/>
-        <JFXButton text="Nuovo Lotto"
+        <JFXButton text="Nuovo Lotto" onAction="#handleNewLotCreation"
                    style="-fx-background-color: #43a047; -fx-text-fill: #fff; -fx-font-weight: 600; -fx-background-radius: 8; -fx-pref-width: 140px; -fx-pref-height: 40px; -fx-font-size: 14px;"/>
     </HBox>
 
@@ -42,10 +42,10 @@
             <JFXTreeTableView fx:id="projectsPerLotTable" VBox.vgrow="ALWAYS"
                               style="-fx-background-color: #fff; -fx-background-radius: 12; -fx-border-color: #e0e0e0; -fx-border-radius: 12;">
                 <columns>
-                    <JFXTreeTableColumn fx:id="projNameCol" text="Nome"/>
-                    <JFXTreeTableColumn fx:id="projStartCol" text="Data Inizio"/>
-                    <JFXTreeTableColumn fx:id="projEndCol" text="Data Fine"/>
-                    <JFXTreeTableColumn fx:id="projActionsCol" text="Azioni"/>
+                    <JFXTreeTableColumn fx:id="nameCol" text="Nome" />
+                    <JFXTreeTableColumn fx:id="lotCol" text="Lotto" />
+                    <JFXTreeTableColumn fx:id="seasonCol" text="Stagione" />
+                    <JFXTreeTableColumn fx:id="statusCol" text="Stato" />
                 </columns>
             </JFXTreeTableView>
         </VBox>

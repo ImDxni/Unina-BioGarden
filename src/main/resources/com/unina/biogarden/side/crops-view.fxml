@@ -18,7 +18,7 @@
         <Label text="Colture"
                style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-font-family: 'Inter', Arial, sans-serif;"/>
         <Pane HBox.hgrow="ALWAYS"/>
-        <JFXButton text="Nuova Coltura"
+        <JFXButton text="Nuova Coltura" onAction="#handleNewCropButton"
                    style="-fx-background-color: #43a047; -fx-text-fill: #fff; -fx-font-weight: 600; -fx-background-radius: 8; -fx-pref-width: 120px; -fx-pref-height: 36px;"/>
     </HBox>
 
