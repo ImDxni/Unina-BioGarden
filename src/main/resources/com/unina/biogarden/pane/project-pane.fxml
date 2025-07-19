@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Pane?>
+
+<fx:root type="VBox" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/24.0.1"
+         spacing="10" styleClass="project-block">
+    <HBox alignment="CENTER_LEFT" spacing="16">
+        <Label fx:id="projectTitleLabel"
+               style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-font-family: 'Inter', Arial;"/>
+        <Pane HBox.hgrow="ALWAYS"/>
+        <JFXButton text="Aggiungi Coltivazione" fx:id="addCultivationButton"
+                   style="-fx-background-color: #43a047; -fx-text-fill: #fff; -fx-font-weight: 600; -fx-background-radius: 8; -fx-pref-width: 180px; -fx-pref-height: 35px; -fx-font-size: 14px;"/>
+    </HBox>
+
+    <ScrollPane hbarPolicy="AS_NEEDED" vbarPolicy="NEVER" fitToHeight="true"
+                style="-fx-background-color: transparent; -fx-border-color: #e0e0e0; -fx-border-radius: 8;">
+        <HBox fx:id="cultivationsContainer" spacing="15" alignment="CENTER_LEFT"
+              style="-fx-padding: 10;"/>
+    </ScrollPane>
+</fx:root>

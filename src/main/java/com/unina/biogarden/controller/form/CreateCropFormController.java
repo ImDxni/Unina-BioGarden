@@ -17,7 +17,7 @@ public class CreateCropFormController extends AbstractForm{
 
     private Runnable onCropCreated;
 
-    private ProjectService service = new ProjectService();
+    private final ProjectService service = new ProjectService();
 
     @FXML
     public void initialize() {

@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.Pane?>
 
+<?import javafx.scene.control.ScrollPane?>
 <VBox spacing="24.0"
       fx:controller="com.unina.biogarden.controller.side.ProjectsController"
       xmlns="http://javafx.com/javafx/24.0.1"
@@ -22,12 +23,11 @@
         <JFXButton text="Nuovo Progetto"  onAction="#handleNewProjectButton"
                    style="-fx-background-color: #43a047; -fx-text-fill: #fff; -fx-font-weight: 600; -fx-background-radius: 8; -fx-pref-width: 120px; -fx-pref-height: 36px;"/>
     </HBox>
-    <JFXTreeTableView fx:id="projectTable" prefHeight="480" style="-fx-background-radius: 14; -fx-border-radius: 14; -fx-table-cell-border-color: #ededed;">
-        <columns>
-            <JFXTreeTableColumn fx:id="nameCol" text="Nome" />
-            <JFXTreeTableColumn fx:id="lotCol" text="Lotto" />
-            <JFXTreeTableColumn fx:id="seasonCol" text="Stagione" />
-            <JFXTreeTableColumn fx:id="statusCol" text="Stato" />
-        </columns>
-    </JFXTreeTableView>
+    <ScrollPane VBox.vgrow="ALWAYS" fitToWidth="true"
+                hbarPolicy="NEVER"
+                style="-fx-background-color: transparent;">
+        <VBox fx:id="mainActivitiesContainer" spacing="40" alignment="TOP_LEFT"
+              style="-fx-background-color: #ffffff; -fx-background-radius: 12; -fx-padding: 24;">
+        </VBox>
+    </ScrollPane>
 </VBox>

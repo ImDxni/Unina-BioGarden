@@ -5,14 +5,16 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class Crop extends RecursiveTreeObject<Crop> {
+    private final int id;
     private final StringProperty name;
     private final StringProperty growthTime;
     private final StringProperty seeded;
     private final StringProperty harvested;
 
-    public Crop(String name, int growthTime) {
+    public Crop(int id,String name, int growthTime) {
+        this.id = id;
         this.name = new SimpleStringProperty(name);
-        this.growthTime = new SimpleStringProperty(growthTime + " giorni");
+        this.growthTime = new SimpleStringProperty(growthTime + " Giorni");
         this.seeded = new SimpleStringProperty("0");
         this.harvested = new SimpleStringProperty("0");
     }
@@ -40,5 +42,14 @@ public class Crop extends RecursiveTreeObject<Crop> {
 
     public void setHarvested(String harvestedCount) {
         this.harvested.set(harvestedCount);
+    }
+
+    @Override
+    public String toString() {
+        return nameProperty().get() + " (" + growthTimeProperty().get() + ")";
+    }
+
+    public int getId() {
+        return id;
     }
 }

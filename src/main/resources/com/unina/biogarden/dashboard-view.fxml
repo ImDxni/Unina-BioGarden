@@ -61,7 +61,7 @@
                         </ImageView>
                         <Label styleClass="menu-label" text="Colture" />
                     </HBox>
-                    <HBox onMouseClicked="#changePage" spacing="12" styleClass="menu-item">
+                    <HBox fx:id="activities" onMouseClicked="#changePage" spacing="12" styleClass="menu-item">
                         <ImageView fitHeight="22" fitWidth="22">
                             <image>
                                 <Image url="@icons/tasks.png" />

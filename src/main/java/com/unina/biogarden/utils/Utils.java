@@ -116,4 +116,11 @@ public class Utils {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    public static String firstCapitalLetter(String s){
+        if (s == null || s.isEmpty()) {
+            return s;
+        }
+        return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
+    }
 }

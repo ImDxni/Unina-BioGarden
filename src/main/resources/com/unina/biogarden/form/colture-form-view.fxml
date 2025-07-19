@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+
+<VBox spacing="15" alignment="CENTER"
+      xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.unina.biogarden.controller.form.CreateColtureFormController"
+      style="-fx-background-color: #ffffff; -fx-padding: 20;">
+
+    <Label text="Aggiungi Nuova Coltivazione"
+           style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-font-family: 'Inter', Arial; -fx-text-fill: #333;"/>
+
+    <VBox spacing="10" alignment="TOP_LEFT" maxWidth="250">
+        <Label text="Seleziona la Coltivazione:"
+               style="-fx-font-size: 14px; -fx-font-weight: 500; -fx-text-fill: #555;"/>
+        <JFXComboBox fx:id="cropComboBox" prefWidth="250" promptText="Scegli una coltura..."
+                     style="-jfx-focus-color: #4CAF50; -jfx-unfocus-color: #9E9E9E;"/>
+
+        <Label text="Seleziona il Coltivatore:"
+               style="-fx-font-size: 14px; -fx-font-weight: 500; -fx-text-fill: #555;"/>
+        <JFXComboBox fx:id="growerComboBox" prefWidth="250" promptText="Scegli un coltivatore..."
+                     style="-jfx-focus-color: #4CAF50; -jfx-unfocus-color: #9E9E9E;"/>
+    </VBox>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <JFXButton text="Annulla" onAction="#cancel"
+                   style="-fx-background-color: #f0f0f0; -fx-text-fill: #333; -fx-font-weight: 600; -fx-background-radius: 6; -fx-pref-width: 90px; -fx-pref-height: 35px;"/>
+        <JFXButton text="Aggiungi" onAction="#handleCreate"
+                   style="-fx-background-color: #43a047; -fx-text-fill: #fff; -fx-font-weight: 600; -fx-background-radius: 6; -fx-pref-width: 90px; -fx-pref-height: 35px;"/>
+    </HBox>
+</VBox>

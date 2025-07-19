@@ -37,10 +37,10 @@ public class CropDAO {
         }
     }
 
-    public Collection<CropDTO> fetchAllColture() {
+    public Collection<CropDTO> fetchAllCrop() {
         Set<CropDTO> colture = new HashSet<>();
         try (Connection conn = dataSource.getConnection()) {
-            PreparedStatement stmnt = conn.prepareStatement("SELECT id, tipologia, tempomaturazione FROM Coltura");
+            PreparedStatement stmnt = conn.prepareStatement("SELECT * FROM Coltura");
             ResultSet rs = stmnt.executeQuery();
             while (rs.next()) {
                 colture.add(new CropDTO(
