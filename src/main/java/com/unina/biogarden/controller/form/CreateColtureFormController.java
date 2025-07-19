@@ -17,8 +17,6 @@ public class CreateColtureFormController extends AbstractForm {
 
     @FXML
     private JFXComboBox<Crop> cropComboBox;
-    @FXML
-    private JFXComboBox<Farmer> growerComboBox;
 
     private final ProjectService service = new ProjectService();
     private final UserService userService = new UserService();
@@ -30,7 +28,6 @@ public class CreateColtureFormController extends AbstractForm {
     public void initialize() {
         try {
             cropComboBox.setItems(FXCollections.observableArrayList(service.getCrops()));
-            growerComboBox.setItems(FXCollections.observableArrayList(userService.fetchAllFarmer()));
 
         } catch (RuntimeException e) {
             showAlert(Alert.AlertType.ERROR, "Errore Caricamento", "Impossibile caricare i dati: " + e.getMessage());
@@ -50,7 +47,6 @@ public class CreateColtureFormController extends AbstractForm {
     @Override
     protected void handleCreate(ActionEvent event) {
         Crop selectedCrop = cropComboBox.getSelectionModel().getSelectedItem();
-        Farmer selectedGrower = growerComboBox.getSelectionModel().getSelectedItem();
 
         if (targetProject == null) {
             showAlert(Alert.AlertType.ERROR, "Errore Interno", "Il progetto di destinazione non è stato impostato. Contatta l'amministratore.");
@@ -59,11 +55,6 @@ public class CreateColtureFormController extends AbstractForm {
 
         if (selectedCrop == null) {
             showAlert(Alert.AlertType.WARNING, "Selezione Obbligatoria", "Per favore, seleziona una coltura.");
-            return;
-        }
-
-        if (selectedGrower == null) {
-            showAlert(Alert.AlertType.WARNING, "Selezione Obbligatoria", "Per favore, seleziona un coltivatore.");
             return;
         }
 
