@@ -21,7 +21,7 @@ public class ActivityDAO {
     public void insertActivity(ActivityDTO object) {
         try (Connection conn = dataSource.getConnection()) {
             CallableStatement stmnt = conn.prepareCall("{? = call CreaAttivita(?,?,?,?,?,?,?,?,?,?,?)}");
-            stmnt.registerOutParameter(1, java.sql.Types.INTEGER);
+            stmnt.registerOutParameter(1, Types.INTEGER);
 
             stmnt.setDate(2, Date.valueOf(object.getDate()));
             PGobject activityStatusObj = new PGobject();
@@ -41,24 +41,24 @@ public class ActivityDAO {
                     SeedingActivityDTO seedingActivityDTO = (SeedingActivityDTO) object;
                     stmnt.setInt(8, seedingActivityDTO.getQuantity());
                     stmnt.setString(9, seedingActivityDTO.getUnit());
-                    stmnt.setNull(10, java.sql.Types.INTEGER);
-                    stmnt.setNull(11, java.sql.Types.VARCHAR);
-                    stmnt.setNull(12, java.sql.Types.INTEGER);
+                    stmnt.setNull(10, Types.INTEGER);
+                    stmnt.setNull(11, Types.INTEGER);
+                    stmnt.setNull(12, Types.VARCHAR);
                 }
                 case HARVEST -> {
                     HarvestingActivityDTO harvestingActivityDTO = (HarvestingActivityDTO) object;
-                    stmnt.setNull(8, java.sql.Types.INTEGER);
-                    stmnt.setNull(9, java.sql.Types.VARCHAR);
+                    stmnt.setNull(8, Types.INTEGER);
+                    stmnt.setNull(9, Types.VARCHAR);
                     stmnt.setInt(10, harvestingActivityDTO.getExpectedQuantity());
                     stmnt.setInt(11, harvestingActivityDTO.getActualQuantity());
                     stmnt.setString(12, harvestingActivityDTO.getUnit());
                 }
                 case IRRIGATION -> {
-                    stmnt.setNull(8, java.sql.Types.INTEGER);
-                    stmnt.setNull(9, java.sql.Types.VARCHAR);
-                    stmnt.setNull(10, java.sql.Types.INTEGER);
-                    stmnt.setNull(11, java.sql.Types.VARCHAR);
-                    stmnt.setNull(12, java.sql.Types.INTEGER);
+                    stmnt.setNull(8, Types.INTEGER);
+                    stmnt.setNull(9, Types.VARCHAR);
+                    stmnt.setNull(10, Types.INTEGER);
+                    stmnt.setNull(11, Types.INTEGER);
+                    stmnt.setNull(12, Types.VARCHAR);
                 }
                 default -> throw new IllegalArgumentException("Unsupported activity type: " + object.getType());
             }

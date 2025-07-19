@@ -14,7 +14,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -57,7 +56,7 @@ public class CultivationActivitiesController {
     public void initialize() {
         // Configura le cell factory per le colonne della tabella
         colDate.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getDate()));
-        colDate.setCellFactory(column -> new TableCell<Activity, LocalDate>() {
+        colDate.setCellFactory(column -> new TableCell<>() {
             @Override
             protected void updateItem(LocalDate item, boolean empty) {
                 super.updateItem(item, empty);
@@ -85,11 +84,13 @@ public class CultivationActivitiesController {
                 editButton.setOnAction(event -> {
                     Activity activity = getTableView().getItems().get(getIndex());
                     handleEditActivity(activity);
+                    loadActivities();
                 });
 
                 deleteButton.setOnAction(event -> {
                     Activity activity = getTableView().getItems().get(getIndex());
                     handleDeleteActivity(activity);
+                    loadActivities();
                 });
             }
 
@@ -121,6 +122,7 @@ public class CultivationActivitiesController {
      * Carica le attività della coltivazione corrente nella tabella.
      */
     private void loadActivities() {
+        activitiesTable.setItems(FXCollections.observableArrayList()); // Pulisce la tabella prima di caricare i nuovi dati
         if (currentCultivation != null) {
             Collection<Activity> activities = projectService.fetchActivities(currentCultivation.getId()); // Assumi un getId() per Colture
             activitiesTable.setItems(FXCollections.observableArrayList(activities));
