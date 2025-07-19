@@ -4,17 +4,17 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class CropRow extends RecursiveTreeObject<CropRow> {
+public class Crop extends RecursiveTreeObject<Crop> {
     private final StringProperty name;
-    private final StringProperty growthTime; // Tempo di maturazione in giorni
-    private final StringProperty seeded; // Campi per "Seminati" e "Raccolti" (non direttamente dal DTO)
+    private final StringProperty growthTime;
+    private final StringProperty seeded;
     private final StringProperty harvested;
 
-    public CropRow(String name, int growthTime) {
+    public Crop(String name, int growthTime) {
         this.name = new SimpleStringProperty(name);
-        this.growthTime = new SimpleStringProperty(growthTime + " giorni"); // Formattazione
-        this.seeded = new SimpleStringProperty("0"); // Placeholder, da popolare dinamicamente se i dati sono disponibili
-        this.harvested = new SimpleStringProperty("0"); // Placeholder
+        this.growthTime = new SimpleStringProperty(growthTime + " giorni");
+        this.seeded = new SimpleStringProperty("0");
+        this.harvested = new SimpleStringProperty("0");
     }
 
     // Getters per le Property
@@ -34,7 +34,6 @@ public class CropRow extends RecursiveTreeObject<CropRow> {
         return harvested;
     }
 
-    // Potresti voler aggiungere metodi per aggiornare seeded e harvested se i dati vengono caricati dopo
     public void setSeeded(String seededCount) {
         this.seeded.set(seededCount);
     }

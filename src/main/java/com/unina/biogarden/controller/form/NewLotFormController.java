@@ -1,8 +1,7 @@
 package com.unina.biogarden.controller.form;
 
 import com.jfoenix.controls.JFXTextField;
-import com.unina.biogarden.dao.LottoDAO;
-import com.unina.biogarden.dto.LottoDTO;
+import com.unina.biogarden.service.ProjectService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -17,9 +16,9 @@ public class NewLotFormController extends AbstractForm{
     @FXML
     private JFXTextField areaField;
 
-    private final LottoDAO dao = new LottoDAO();
-
     private Runnable createRunnable;
+
+    private final ProjectService service = new ProjectService();
 
     public void setOnLotCreated(Runnable createRunnable) {
         this.createRunnable = createRunnable;
@@ -43,7 +42,9 @@ public class NewLotFormController extends AbstractForm{
                 return;
             }
 
-            dao.createPlot(nome,area);
+
+            service.createLot(nome, area);
+
             try {
 
                 if (createRunnable != null) {

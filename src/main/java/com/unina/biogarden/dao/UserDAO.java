@@ -1,7 +1,8 @@
 package com.unina.biogarden.dao;
 
 import com.unina.biogarden.database.ConnectionManager;
-import com.unina.biogarden.dto.UtenteDTO;
+import com.unina.biogarden.dto.UserDTO;
+import com.unina.biogarden.enumerations.UserType;
 import com.unina.biogarden.exceptions.LoginFallitoException;
 import com.unina.biogarden.exceptions.UtenteEsistenteException;
 import com.unina.biogarden.utils.Utils;
@@ -12,13 +13,14 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Collection;
 
 /**
  * Data Access Object (DAO) for managing user-related database operations.
  * This class provides methods for user registration and login, interacting with the database
  * through a connection pool managed by {@link ConnectionManager}.
  */
-public class UtenteDAO {
+public class UserDAO {
     private final DataSource dataSource = ConnectionManager.getDataSource();
 
     /**
@@ -33,7 +35,7 @@ public class UtenteDAO {
      * @throws UtenteEsistenteException If a user with the provided email already exists.
      * @throws RuntimeException         If a general SQL error occurs during registration.
      */
-    public void registerUser(String nome, String cognome, String email, String password, String tipo) throws UtenteEsistenteException {
+    public void registerUser(String nome, String cognome, String email, String password, UserType tipo) throws UtenteEsistenteException {
         String hashedPassword = Utils.encryptPassword(password);
 
         try(Connection conn = dataSource.getConnection()){
@@ -47,7 +49,7 @@ public class UtenteDAO {
 
             PGobject tipoUtenteObj = new PGobject();
             tipoUtenteObj.setType("TipoUtente");
-            tipoUtenteObj.setValue(tipo.toLowerCase());
+            tipoUtenteObj.setValue(tipo.getType().toLowerCase());
 
             stmt.setObject(6, tipoUtenteObj);
 
@@ -68,11 +70,11 @@ public class UtenteDAO {
      *
      * @param email The email address of the user attempting to log in.
      * @param password The plain-text password provided by the user.
-     * @return An {@link UtenteDTO} representing the logged-in user if credentials are valid.
+     * @return An {@link UserDTO} representing the logged-in user if credentials are valid.
      * @throws LoginFallitoException If the user is not found or the password is incorrect.
      * @throws RuntimeException If a general SQL error occurs during the login process.
      */
-    public UtenteDTO loginUser(String email, String password) throws LoginFallitoException {
+    public UserDTO loginUser(String email, String password) throws LoginFallitoException {
         try (Connection conn = dataSource.getConnection()) {
             PreparedStatement stmnt = conn.prepareStatement("SELECT * FROM utente WHERE email = ?");
             stmnt.setString(1, email);
@@ -87,7 +89,7 @@ public class UtenteDAO {
                     String cognome = rs.getString("cognome");
                     String tipo = rs.getString("tipo");
 
-                    return new UtenteDTO(id, nome, cognome, email, storedPassword, tipo);
+                    return new UserDTO(id, nome, cognome, email, storedPassword, UserType.fromString(tipo));
                 } else {
                     throw new LoginFallitoException("Password errata");
                 }
@@ -98,4 +100,28 @@ public class UtenteDAO {
             throw new RuntimeException("Errore durante il login dell'utente", ex);
         }
     }
+
+    public Collection<UserDTO> fetchAllUsers(){
+        try (Connection conn = dataSource.getConnection()) {
+            PreparedStatement stmnt = conn.prepareStatement("SELECT * FROM utente");
+            var rs = stmnt.executeQuery();
+            Collection<UserDTO> users = new java.util.ArrayList<>();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String nome = rs.getString("nome");
+                String cognome = rs.getString("cognome");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+                String tipo = rs.getString("tipo");
+
+                users.add(new UserDTO(id, nome, cognome, email, password, UserType.fromString(tipo)));
+            }
+            return users;
+        } catch (SQLException ex) {
+            throw new RuntimeException("Errore durante il recupero degli utenti", ex);
+        }
+    }
+
+
 }

@@ -2,10 +2,9 @@ package com.unina.biogarden.controller.form;
 
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
-import com.unina.biogarden.dao.LottoDAO;
-import com.unina.biogarden.dao.ProgettoDAO;
-import com.unina.biogarden.dto.LottoDTO;
-import com.unina.biogarden.dto.ProgettoDTO;
+import com.unina.biogarden.dto.ProjectDTO;
+import com.unina.biogarden.models.Lot;
+import com.unina.biogarden.service.ProjectService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,7 +12,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
 import java.time.LocalDate;
-import java.util.Collection;
 
 import static com.unina.biogarden.utils.Utils.showAlert;
 
@@ -26,28 +24,25 @@ public class CreateProjectFormController extends AbstractForm{
     @FXML
     private DatePicker endDatePicker;
     @FXML
-    private JFXComboBox<LottoDTO> lotComboBox;
-
-    private ProgettoDAO progettoDAO;
-    private LottoDAO lottoDAO;
+    private JFXComboBox<Lot> lotComboBox;
 
     private Runnable createRunnable;
+
+    private final ProjectService service = new ProjectService();
 
     public void setOnProjectCreated(Runnable createRunnable) {
         this.createRunnable = createRunnable;
     }
 
+
     @FXML
     public void initialize() {
-        progettoDAO = new ProgettoDAO();
-        lottoDAO = new LottoDAO(); // Inizializza LottoDAO
         populateLotComboBox();
     }
 
     private void populateLotComboBox() {
         try {
-            Collection<LottoDTO> lotti = lottoDAO.getAllLots();
-            ObservableList<LottoDTO> observableLotti = FXCollections.observableArrayList(lotti);
+            ObservableList<Lot> observableLotti = FXCollections.observableArrayList(service.fetchAllLots());
             lotComboBox.setItems(observableLotti);
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Errore Caricamento Lotti", "Impossibile caricare i lotti dal database.");
@@ -61,7 +56,7 @@ public class CreateProjectFormController extends AbstractForm{
         String nome = projectNameField.getText();
         LocalDate dataInizio = startDatePicker.getValue();
         LocalDate dataFine = endDatePicker.getValue();
-        LottoDTO selectedLot = lotComboBox.getSelectionModel().getSelectedItem();
+        Lot selectedLot = lotComboBox.getSelectionModel().getSelectedItem();
 
         if (nome.isEmpty() || dataInizio == null || dataFine == null || selectedLot == null) {
             showAlert(Alert.AlertType.WARNING, "Campi Vuoti", "Per favore, compila tutti i campi.");
@@ -74,7 +69,13 @@ public class CreateProjectFormController extends AbstractForm{
         }
 
         try {
-            progettoDAO.creaProgetto(nome, dataInizio, dataFine, selectedLot.id());
+            service.insert(new ProjectDTO(
+                0,
+                nome,
+                dataInizio,
+                dataFine,
+                selectedLot.getId()
+            ));
 
             if (createRunnable != null) {
                 createRunnable.run();

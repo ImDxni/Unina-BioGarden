@@ -1,7 +1,7 @@
 package com.unina.biogarden.controller.form;
 
 import com.jfoenix.controls.JFXTextField;
-import com.unina.biogarden.dao.ColturaDAO;
+import com.unina.biogarden.service.ProjectService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -17,15 +17,13 @@ public class CreateCropFormController extends AbstractForm{
 
     private Runnable onCropCreated;
 
+    private ProjectService service = new ProjectService();
 
     @FXML
     public void initialize() {
-        ColturaDAO colturaDAO = new ColturaDAO();
-
-        // Forza il campo giorni di maturazione ad accettare solo numeri
         growthTimeField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
-                growthTimeField.setText(newValue.replaceAll("[^\\d]", ""));
+                growthTimeField.setText(newValue.replaceAll("\\D", ""));
             }
         });
     }
@@ -56,11 +54,10 @@ public class CreateCropFormController extends AbstractForm{
             return;
         }
 
+        service.createCrop(nomeColtura, tempoMaturazione);
         try {
-            showAlert(Alert.AlertType.INFORMATION, "Successo", "Coltura '" + nomeColtura + "' creata con successo!");
-
             if (onCropCreated != null) {
-                onCropCreated.run(); // Notifica il controller padre di aggiornare la tabella
+                onCropCreated.run();
             }
 
             closeStage(event);

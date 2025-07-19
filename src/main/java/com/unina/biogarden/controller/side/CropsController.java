@@ -1,18 +1,15 @@
 package com.unina.biogarden.controller.side;
 
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTreeTableColumn;
 import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import com.unina.biogarden.controller.form.CreateCropFormController; // Importa il controller del form
-import com.unina.biogarden.dao.ColturaDAO; // Importa il DAO
-import com.unina.biogarden.dto.ColturaDTO; // Importa il DTO
-import com.unina.biogarden.models.CropRow; // Dovrai creare questa classe, simile a ProjectRow
+import com.unina.biogarden.controller.form.CreateCropFormController;
+import com.unina.biogarden.models.Crop;
+import com.unina.biogarden.service.ProjectService;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -23,31 +20,26 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.stream.Collectors;
 
 import static com.unina.biogarden.utils.Utils.showAlert; // Se hai una classe Utils per showAlert
 
 public class CropsController {
 
     @FXML
-    private JFXTreeTableView<CropRow> cropsTable;
+    private JFXTreeTableView<Crop> cropsTable;
     @FXML
-    private JFXTreeTableColumn<CropRow, String> nameCol;
+    private JFXTreeTableColumn<Crop, String> nameCol;
     @FXML
-    private JFXTreeTableColumn<CropRow, String> growthTimeCol;
+    private JFXTreeTableColumn<Crop, String> growthTimeCol;
     @FXML
-    private JFXTreeTableColumn<CropRow, String> seededCol; // Questi campi non sono direttamente nel ColturaDTO, dovrai calcolarli o aggiungerli
+    private JFXTreeTableColumn<Crop, String> seededCol; // Questi campi non sono direttamente nel ColturaDTO, dovrai calcolarli o aggiungerli
     @FXML
-    private JFXTreeTableColumn<CropRow, String> harvestedCol; // Questi campi non sono direttamente nel ColturaDTO, dovrai calcolarli o aggiungerli
-    @FXML
-    private JFXButton newCropButton; // Aggiungi fx:id al bottone "Nuova Coltura"
+    private JFXTreeTableColumn<Crop, String> harvestedCol; // Questi campi non sono direttamente nel ColturaDTO, dovrai calcolarli o aggiungerli
 
-    private ColturaDAO colturaDAO; // Istanza del DAO
+    private final ProjectService service = new ProjectService();
 
     @FXML
     public void initialize() {
-        colturaDAO = new ColturaDAO();
         cropsTable.setColumnResizePolicy(JFXTreeTableView.CONSTRAINED_RESIZE_POLICY);
 
         initCellFactory();
@@ -65,15 +57,9 @@ public class CropsController {
     // Metodo per caricare e popolare la tabella
     private void fetchAndPopulateCrops() {
         try {
-            Collection<ColturaDTO> coltureDTO = colturaDAO.fetchAllColture();
-            ObservableList<CropRow> data = coltureDTO.stream()
-                    .map(c -> new CropRow(
-                            c.nome(),
-                            c.giorniMaturazione()
-                    ))
-                    .collect(Collectors.toCollection(FXCollections::observableArrayList));
+            ObservableList<Crop> data = FXCollections.observableArrayList(service.getCrops());
 
-            TreeItem<CropRow> root = new RecursiveTreeItem<>(data, RecursiveTreeObject::getChildren);
+            TreeItem<Crop> root = new RecursiveTreeItem<>(data, RecursiveTreeObject::getChildren);
             cropsTable.setRoot(root);
             cropsTable.setShowRoot(false);
         } catch (Exception e) {
@@ -84,7 +70,7 @@ public class CropsController {
 
     // Metodo per gestire il click sul bottone "Nuova Coltura"
     @FXML
-    private void handleNewCropButton(ActionEvent event) {
+    private void handleNewCropButton() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/unina/biogarden/form/crop-form-view.fxml"));
             Parent root = loader.load();

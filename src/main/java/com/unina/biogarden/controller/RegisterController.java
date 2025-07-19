@@ -1,7 +1,10 @@
 package com.unina.biogarden.controller;
 
-import com.unina.biogarden.dao.UtenteDAO;
+import com.unina.biogarden.dao.UserDAO;
+import com.unina.biogarden.dto.UserDTO;
+import com.unina.biogarden.enumerations.UserType;
 import com.unina.biogarden.exceptions.UtenteEsistenteException;
+import com.unina.biogarden.service.UserService;
 import com.unina.biogarden.utils.Utils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +16,7 @@ import java.io.IOException;
 /**
  * Controller for the user registration view.
  * This class handles user input for registration, validates the data,
- * attempts to register a new user via {@link UtenteDAO}, and manages navigation
+ * attempts to register a new user via {@link UserDAO}, and manages navigation
  * back to the login screen.
  */
 public class RegisterController {
@@ -86,14 +89,14 @@ public class RegisterController {
 
     /**
      * Handles the action when the register button is pressed.
-     * It validates all input fields, attempts to register the user through {@link UtenteDAO},
+     * It validates all input fields, attempts to register the user through {@link UserDAO},
      * and displays error messages if validation fails or if the user already exists.
      */
     @FXML
     private void onRegister() {
         errorLabel.setVisible(false);
 
-        UtenteDAO userDao = new UtenteDAO();
+        UserDAO userDao = new UserDAO();
 
         String nome = nomeField.getText();
         String cognome = cognomeField.getText();
@@ -114,8 +117,11 @@ public class RegisterController {
 
         String tipo = tipologiaCombo.getValue();
 
+        UserService service = new UserService();
         try{
-            userDao.registerUser(nome,cognome,email,password,tipo);
+
+            service.insert(new UserDTO(1,nome, cognome, email, password, UserType.fromString(tipo)));
+
             System.out.println("Utente registrato!");
 
             onLoginLink();

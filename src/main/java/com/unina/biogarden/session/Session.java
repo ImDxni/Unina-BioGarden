@@ -1,6 +1,6 @@
 package com.unina.biogarden.session;
 
-import com.unina.biogarden.dto.UtenteDTO;
+import com.unina.biogarden.dto.UserDTO;
 
 /**
  * Manages the current user session.
@@ -8,7 +8,7 @@ import com.unina.biogarden.dto.UtenteDTO;
  * and provides methods for login, logout, retrieving the current user, and checking authentication status.
  */
 public class Session {
-    private static UtenteDTO currentuser;
+    private static UserDTO currentuser;
 
     /**
      * Private constructor to prevent direct instantiation, enforcing the singleton pattern.
@@ -18,18 +18,18 @@ public class Session {
     /**
      * Sets the current user for the session, effectively logging them in.
      *
-     * @param utente The {@link UtenteDTO} object representing the user who has successfully logged in.
+     * @param utente The {@link UserDTO} object representing the user who has successfully logged in.
      */
-    public static void login(UtenteDTO utente) {
+    public static void login(UserDTO utente) {
         currentuser = utente;
     }
 
     /**
      * Retrieves the currently logged-in user.
      *
-     * @return The {@link UtenteDTO} object of the current user, or null if no user is logged in.
+     * @return The {@link UserDTO} object of the current user, or null if no user is logged in.
      */
-    public static UtenteDTO getUtente() {
+    public static UserDTO getUtente() {
         return currentuser;
     }
 

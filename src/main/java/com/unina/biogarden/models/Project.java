@@ -1,7 +1,6 @@
 package com.unina.biogarden.models;
 
 import com.jfoenix.controls.JFXTreeTableColumn;
-import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -10,15 +9,16 @@ import javafx.scene.control.TreeTableColumn;
 import javafx.util.Callback;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.function.Function;
 
-public class ProjectRow extends RecursiveTreeObject<ProjectRow> {
+public class Project extends RecursiveTreeObject<Project> {
     private final SimpleStringProperty name, lot, season, status;
 
-    public ProjectRow(String name, int idLotto, LocalDate startDate, LocalDate endDate) {
+    public Project(String name, String lotName, LocalDate startDate, LocalDate endDate) {
         this.name = new SimpleStringProperty(name);
 
-        this.lot = new SimpleStringProperty("Lotto ID: " + idLotto);
+        this.lot = new SimpleStringProperty(lotName);
         this.season = new SimpleStringProperty(getSeason(startDate));
         this.status = new SimpleStringProperty(getStatus(startDate, endDate));
     }
@@ -57,10 +57,10 @@ public class ProjectRow extends RecursiveTreeObject<ProjectRow> {
     }
 
 
-    private static Callback<TreeTableColumn.CellDataFeatures<ProjectRow, String>, ObservableValue<String>> getSafeCellValueFactory(
-            Function<ProjectRow, SimpleStringProperty> extractor) {
+    private static Callback<TreeTableColumn.CellDataFeatures<Project, String>, ObservableValue<String>> getSafeCellValueFactory(
+            Function<Project, SimpleStringProperty> extractor) {
         return param -> {
-            TreeItem<ProjectRow> item = param.getValue();
+            TreeItem<Project> item = param.getValue();
             if (item != null && item.getValue() != null) {
                 return extractor.apply(item.getValue());
             }
@@ -68,15 +68,15 @@ public class ProjectRow extends RecursiveTreeObject<ProjectRow> {
         };
     }
 
-    public static void initCellFactory(JFXTreeTableColumn<ProjectRow, String> nameCol,
-                                       JFXTreeTableColumn<ProjectRow, String> lotCol,
-                                       JFXTreeTableColumn<ProjectRow, String> seasonCol,
-                                       JFXTreeTableColumn<ProjectRow, String> statusCol) {
+    public static void initCellFactory(JFXTreeTableColumn<Project, String> nameCol,
+                                       JFXTreeTableColumn<Project, String> lotCol,
+                                       JFXTreeTableColumn<Project, String> seasonCol,
+                                       JFXTreeTableColumn<Project, String> statusCol) {
 
-        nameCol.setCellValueFactory(getSafeCellValueFactory(ProjectRow::nameProperty));
-        lotCol.setCellValueFactory(getSafeCellValueFactory(ProjectRow::lotProperty));
-        seasonCol.setCellValueFactory(getSafeCellValueFactory(ProjectRow::seasonProperty));
-        statusCol.setCellValueFactory(getSafeCellValueFactory(ProjectRow::statusProperty));
+        nameCol.setCellValueFactory(getSafeCellValueFactory(Project::nameProperty));
+        lotCol.setCellValueFactory(getSafeCellValueFactory(Project::lotProperty));
+        seasonCol.setCellValueFactory(getSafeCellValueFactory(Project::seasonProperty));
+        statusCol.setCellValueFactory(getSafeCellValueFactory(Project::statusProperty));
     }
 
 

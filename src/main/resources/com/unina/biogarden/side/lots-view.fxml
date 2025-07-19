@@ -29,7 +29,7 @@
     <HBox spacing="40" VBox.vgrow="ALWAYS">
         <VBox spacing="16" prefWidth="280" VBox.vgrow="ALWAYS"
               style="-fx-background-color: #ffffff; -fx-background-radius: 12; -fx-border-color: #e0e0e0; -fx-border-radius: 12; -fx-padding: 16;">
-            <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+            <ScrollPane fitToWidth="true" style="-fx-background-color: #ffffff;" VBox.vgrow="ALWAYS">
                 <VBox fx:id="lotsContainer" prefWidth="260" spacing="10"
                       style="-fx-background-color: #ffffff; -fx-padding: 0 0 16 0;"/>
             </ScrollPane>

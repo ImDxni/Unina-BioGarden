@@ -1,7 +1,7 @@
 package com.unina.biogarden.dao;
 
 import com.unina.biogarden.database.ConnectionManager;
-import com.unina.biogarden.dto.ColturaDTO;
+import com.unina.biogarden.dto.CropDTO;
 
 import javax.sql.DataSource;
 import java.sql.CallableStatement;
@@ -13,10 +13,10 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ColturaDAO {
+public class CropDAO {
 
     private final DataSource dataSource = ConnectionManager.getDataSource();
-    public ColturaDTO creaColtura(String tipologia, int tempoMaturazione) {
+    public CropDTO creaColtura(String tipologia, int tempoMaturazione) {
         try (Connection conn = dataSource.getConnection()) {
 
             CallableStatement stmnt = conn.prepareCall("{ ? = call CreaColtura(?, ?) }");
@@ -26,7 +26,7 @@ public class ColturaDAO {
             stmnt.execute();
 
             int idColtura = stmnt.getInt(1);
-            return new ColturaDTO(idColtura, tipologia, tempoMaturazione);
+            return new CropDTO(idColtura, tipologia, tempoMaturazione);
 
         } catch (SQLException ex) {
             if (ex.getSQLState().equalsIgnoreCase("23505")) {
@@ -37,13 +37,13 @@ public class ColturaDAO {
         }
     }
 
-    public Collection<ColturaDTO> fetchAllColture() {
-        Set<ColturaDTO> colture = new HashSet<>();
+    public Collection<CropDTO> fetchAllColture() {
+        Set<CropDTO> colture = new HashSet<>();
         try (Connection conn = dataSource.getConnection()) {
             PreparedStatement stmnt = conn.prepareStatement("SELECT id, tipologia, tempomaturazione FROM Coltura");
             ResultSet rs = stmnt.executeQuery();
             while (rs.next()) {
-                colture.add(new ColturaDTO(
+                colture.add(new CropDTO(
                         rs.getInt("id"),
                         rs.getString("tipologia"),
                         rs.getInt("tempomaturazione")

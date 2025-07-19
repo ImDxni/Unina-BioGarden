@@ -3,35 +3,26 @@ package com.unina.biogarden.controller.side;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.unina.biogarden.controller.form.NewLotFormController;
-import com.unina.biogarden.dao.LottoDAO;
-import com.unina.biogarden.dao.ProgettoDAO;
-import com.unina.biogarden.dto.LottoDTO;
-import com.unina.biogarden.dto.ProgettoDTO;
-import com.unina.biogarden.models.ProjectRow;
+import com.unina.biogarden.models.Lot;
+import com.unina.biogarden.models.Project;
+import com.unina.biogarden.service.ProjectService;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.control.Label;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
-import javafx.scene.control.TreeTableColumn;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static com.unina.biogarden.utils.Utils.showAlert;
 
@@ -43,36 +34,30 @@ public class LotsController {
     private VBox projectsPerLotSection;
 
     @FXML
-    private JFXTreeTableView<ProjectRow> projectsPerLotTable;
+    private JFXTreeTableView<Project> projectsPerLotTable;
     @FXML
-    private JFXTreeTableColumn<ProjectRow, String> nameCol;
+    private JFXTreeTableColumn<Project, String> nameCol;
     @FXML
-    private JFXTreeTableColumn<ProjectRow, String> lotCol;
+    private JFXTreeTableColumn<Project, String> lotCol;
     @FXML
-    private JFXTreeTableColumn<ProjectRow, String> seasonCol;
+    private JFXTreeTableColumn<Project, String> seasonCol;
     @FXML
-    private JFXTreeTableColumn<ProjectRow, String> statusCol;
-
-
-    private final LottoDAO DAO = new LottoDAO();
-    private final ProgettoDAO progettoDAO = new ProgettoDAO();
+    private JFXTreeTableColumn<Project, String> statusCol;
     private Pane selectedLotPane = null;
 
     @FXML
     public void initialize() {
         projectsPerLotTable.setColumnResizePolicy(JFXTreeTableView.CONSTRAINED_RESIZE_POLICY);
-        ProjectRow.initCellFactory(nameCol, lotCol, seasonCol, statusCol);
+        Project.initCellFactory(nameCol, lotCol, seasonCol, statusCol);
 
-        Platform.runLater(() -> {
-            loadLotsIntoSidebar();
-        });
+        Platform.runLater(this::loadLotsIntoSidebar);
 
         projectsPerLotSection.setVisible(false);
         projectsPerLotSection.setManaged(false);
 
     }
 
-    private void loadProjectsForLot(LottoDTO lot) {
+    private void loadProjectsForLot(Lot lot) {
         if (lot == null) {
             projectsPerLotSection.setVisible(false);
             projectsPerLotSection.setManaged(false);
@@ -80,17 +65,11 @@ public class LotsController {
         }
 
         try {
-            Collection<ProgettoDTO> progettiDTO = progettoDAO.fetchProjectsByLot(lot.id());
-            ObservableList<ProjectRow> data = progettiDTO.stream()
-                    .map(p -> new ProjectRow(
-                            p.nome(),
-                            p.idLotto(),
-                            p.dataInizio(),
-                            p.dataFine()
-                    ))
-                    .collect(Collectors.toCollection(FXCollections::observableArrayList));
 
-            TreeItem<ProjectRow> projectRoot = new RecursiveTreeItem<>(data, RecursiveTreeObject::getChildren);
+            ProjectService service = new ProjectService();
+            ObservableList<Project> data = FXCollections.observableArrayList(service.fetchProjectByLot(lot));
+
+            TreeItem<Project> projectRoot = new RecursiveTreeItem<>(data, RecursiveTreeObject::getChildren);
             projectsPerLotTable.setRoot(projectRoot);
             projectsPerLotTable.setShowRoot(false);
 
@@ -109,13 +88,32 @@ public class LotsController {
         lotsContainer.getChildren().clear(); // Pulisci i lotti esistenti
         selectedLotPane = null;
 
-        Collection<LottoDTO> lots = DAO.getAllLots();
+        ProjectService service = new ProjectService();
 
-        LottoDTO firstLot = null;
+        Collection<Lot> lots = service.fetchAllLots();
+
+        Lot firstLot = null;
         Pane firstLotPane = null;
 
-        for (LottoDTO lot : lots) {
-            Pane box = createLotBox(lot);
+        for (Lot lot : lots) {
+            Pane box;
+
+            box = lot.createLotBox(e -> {
+                if (selectedLotPane != null) {
+                    selectedLotPane.getStyleClass().remove("selected");
+                }
+
+                Node targetNode = (Node) e.getTarget();
+                Pane parentPane = findParentPane(targetNode);
+
+                if (parentPane != null) {
+                    parentPane.getStyleClass().add("selected");
+                    selectedLotPane = parentPane;
+                }
+
+                loadProjectsForLot(lot);
+            });
+
             lotsContainer.getChildren().add(box);
 
             if (firstLot == null) {
@@ -135,38 +133,16 @@ public class LotsController {
         }
     }
 
-    private Pane createLotBox(LottoDTO lot) {
-        Label name = new Label(lot.nome());
-        name.setStyle("-fx-font-weight: 600; -fx-font-size: 14px; -fx-text-fill: #222;");
-
-        Label area = new Label(lot.area() + " km²");
-        area.setStyle("-fx-font-size: 12px; -fx-text-fill: #666;");
-
-        VBox content = new VBox(name, area);
-        content.setSpacing(4);
-        content.setLayoutX(12);
-        content.setLayoutY(12);
-
-        Pane box = new Pane(content);
-        box.setPrefSize(110, 80);
-        box.getStyleClass().add("lot-pane");
-
-        box.setOnMouseClicked(e -> {
-            if (selectedLotPane != null) {
-                selectedLotPane.getStyleClass().remove("selected");
-            }
-            box.getStyleClass().add("selected");
-            selectedLotPane = box;
-
-            loadProjectsForLot(lot);
-        });
-
-        return box;
+    private Pane findParentPane(Node node) {
+        while (node != null && !(node instanceof Pane)) {
+            node = node.getParent();
+        }
+        return (Pane) node;
     }
 
 
     @FXML
-    private void handleNewLotCreation(ActionEvent event) {
+    private void handleNewLotCreation() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/unina/biogarden/form/lot-form-view.fxml")); // Percorso corretto
             Parent root = loader.load();
@@ -193,18 +169,6 @@ public class LotsController {
             alert.setContentText("Si è verificato un errore durante il caricamento del modulo. Controlla il percorso del file FXML.");
             alert.showAndWait();
         }
-    }
-
-
-    private Callback<TreeTableColumn.CellDataFeatures<ProjectRow, String>, ObservableValue<String>> getSafeCellValueFactory(
-            Function<ProjectRow, SimpleStringProperty> extractor) {
-        return param -> {
-            TreeItem<ProjectRow> item = param.getValue();
-            if (item != null && item.getValue() != null) {
-                return extractor.apply(item.getValue());
-            }
-            return new SimpleStringProperty("");
-        };
     }
 
 }

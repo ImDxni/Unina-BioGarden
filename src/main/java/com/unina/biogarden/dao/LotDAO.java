@@ -1,7 +1,7 @@
 package com.unina.biogarden.dao;
 
 import com.unina.biogarden.database.ConnectionManager;
-import com.unina.biogarden.dto.LottoDTO;
+import com.unina.biogarden.dto.LotDTO;
 import com.unina.biogarden.session.Session;
 
 import javax.sql.DataSource;
@@ -10,12 +10,12 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-public class LottoDAO {
+public class LotDAO {
 
     private final DataSource dataSource = ConnectionManager.getDataSource();
 
 
-    public LottoDTO createPlot(String name, int area){
+    public LotDTO createPlot(String name, int area){
         int ownerID = Session.getUtente().id();
         try(Connection conn = dataSource.getConnection()){
             CallableStatement stmnt = conn.prepareCall("{ ? = call CreaLotto(?, ?,?) }");
@@ -28,7 +28,7 @@ public class LottoDAO {
             stmnt.executeUpdate();
 
             int plotID = stmnt.getInt(1);
-            return new LottoDTO(plotID, name, area);
+            return new LotDTO(plotID, name, area);
         }catch(SQLException ex){
             ex.printStackTrace();
         }
@@ -36,8 +36,8 @@ public class LottoDAO {
         return null;
     }
 
-    public Collection<LottoDTO> getAllLots(){
-        Set<LottoDTO> lots = new HashSet<>();
+    public Collection<LotDTO> getAllLots(){
+        Set<LotDTO> lots = new HashSet<>();
         try(Connection conn = dataSource.getConnection()){
             PreparedStatement stmnt = conn.prepareStatement("SELECT * FROM lotto WHERE idutente = ?");
 
@@ -45,7 +45,7 @@ public class LottoDAO {
             ResultSet rs = stmnt.executeQuery();
 
             while(rs.next()){
-                lots.add(new LottoDTO(
+                lots.add(new LotDTO(
                         rs.getInt("id"),
                         rs.getString("nome"),
                         rs.getInt("area")
@@ -58,5 +58,23 @@ public class LottoDAO {
         return lots;
     }
 
+    public LotDTO getLotById(int id) {
+        try (Connection conn = dataSource.getConnection()) {
+            PreparedStatement stmnt = conn.prepareStatement("SELECT * FROM lotto WHERE id = ?");
+            stmnt.setInt(1, id);
+            ResultSet rs = stmnt.executeQuery();
+
+            if (rs.next()) {
+                return new LotDTO(
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getInt("area")
+                );
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
 
 }
