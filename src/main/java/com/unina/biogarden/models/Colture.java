@@ -7,7 +7,6 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -16,22 +15,29 @@ import java.time.format.DateTimeFormatter;
 import static com.unina.biogarden.utils.Utils.firstCapitalLetter;
 
 public class Colture {
+    private final int id;
     private final LocalDate startDate;
     private final ColtureStatus status;
 
     private final Crop crop;
 
 
-    public Colture(LocalDate startDate, ColtureStatus status, Crop crop) {
+    public Colture(int id, LocalDate startDate, ColtureStatus status, Crop crop) {
+        this.id = id;
         this.startDate = startDate;
         this.status = status;
         this.crop = crop;
     }
 
-    public Colture(Crop crop){
+    public Colture(int id, Crop crop){
+        this.id = id;
         this.startDate = LocalDate.now();
-        this.status = ColtureStatus.SEEDED;
+        this.status = ColtureStatus.WAITING;
         this.crop = crop;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public LocalDate getStartDate() {

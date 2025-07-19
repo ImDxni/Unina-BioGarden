@@ -61,14 +61,6 @@
                         </ImageView>
                         <Label styleClass="menu-label" text="Colture" />
                     </HBox>
-                    <HBox fx:id="activities" onMouseClicked="#changePage" spacing="12" styleClass="menu-item">
-                        <ImageView fitHeight="22" fitWidth="22">
-                            <image>
-                                <Image url="@icons/tasks.png" />
-                            </image>
-                        </ImageView>
-                        <Label styleClass="menu-label" text="Attività" />
-                    </HBox>
                 </VBox>
             </VBox>
             <Button style="-fx-font-size: 16px; -fx-font-family: 'Inter', 'Arial'; -fx-font-weight: bold; -fx-background-radius: 8; -fx-background-color: #222; -fx-text-fill: #fff; -fx-pref-width: 168px; -fx-pref-height: 40px; -fx-cursor: hand;" text="Esci" AnchorPane.bottomAnchor="28" AnchorPane.leftAnchor="24" onMouseClicked="#onClose"/>

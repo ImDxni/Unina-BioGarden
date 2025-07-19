@@ -1,6 +1,7 @@
 package com.unina.biogarden.enumerations;
 
 public enum ColtureStatus {
+    WAITING("attesa"),
     SEEDED("seminato"),
     GROWED("maturo"),
     HARVESTED("raccolto");

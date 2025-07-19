@@ -14,9 +14,16 @@ public class UserService extends AbstractService<UserDTO>{
 
     private final UserDAO dao = new UserDAO();
 
+    private static Collection<UserDTO> users;
+
+    public UserService() {
+        this.users = dao.fetchAllUsers();
+    }
+
     public Collection<Farmer> fetchAllFarmer(){
         return fetchAll().stream().filter(user -> user.tipo() == UserType.FARMER)
                 .map(user -> new Farmer(
+                        user.id(),
                         user.nome(),
                         user.cognome(),
                         user.email()
@@ -26,7 +33,7 @@ public class UserService extends AbstractService<UserDTO>{
 
     public void login(String email, String password) throws LoginFallitoException {
         UserDTO dto = dao.loginUser(email, password);
-
+        this.users = dao.fetchAllUsers();
         Session.login(dto);
     }
 
@@ -39,6 +46,10 @@ public class UserService extends AbstractService<UserDTO>{
 
     @Override
     public Collection<UserDTO> fetchAll() {
-        return dao.fetchAllUsers();
+        return users;
+    }
+
+    public static Collection<UserDTO> getUsers() {
+        return users;
     }
 }

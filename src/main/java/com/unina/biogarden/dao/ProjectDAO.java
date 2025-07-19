@@ -98,4 +98,26 @@ public class ProjectDAO {
             throw new RuntimeException("Errore durante il recupero del progetto con ID " + projectId, ex);
         }
     }
+
+    public ProjectDTO fetchProjectByColtureId(int coltureId) {
+        try (Connection conn = dataSource.getConnection()) {
+            PreparedStatement stmnt = conn.prepareStatement("SELECT progetto.* FROM progetto INNER JOIN coltivazione ON coltivazione.idprogetto = progetto.id WHERE coltivazione.id = ?");
+            stmnt.setInt(1, coltureId);
+            ResultSet rs = stmnt.executeQuery();
+
+            if (rs.next()) {
+                return new ProjectDTO(
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getObject("datainizio", LocalDate.class),
+                        rs.getObject("datafine", LocalDate.class),
+                        rs.getInt("idlotto")
+                );
+            } else {
+                throw new IllegalStateException("Progetto con ID coltura " + coltureId + " non trovato.");
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException("Errore durante il recupero del progetto con ID coltura " + coltureId, ex);
+        }
+    }
 }

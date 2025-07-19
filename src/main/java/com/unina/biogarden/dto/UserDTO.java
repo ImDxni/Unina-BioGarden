@@ -14,4 +14,8 @@ public record UserDTO(
         String email,   // Email address of the user (must be unique)
         UserType tipo     // Type or role of the user (e.g., admin, regular user)
 ) {
+
+    public String getFullName(){
+        return nome + " " + cognome;
+    }
 }

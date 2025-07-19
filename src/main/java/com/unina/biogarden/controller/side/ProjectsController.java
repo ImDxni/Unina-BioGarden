@@ -7,6 +7,7 @@ import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.unina.biogarden.controller.form.CreateColtureFormController;
 import com.unina.biogarden.controller.form.CreateProjectFormController;
+import com.unina.biogarden.models.Colture;
 import com.unina.biogarden.models.Project;
 import com.unina.biogarden.service.ProjectService;
 import javafx.collections.FXCollections;
@@ -47,8 +48,31 @@ public class ProjectsController {
 
             project.setColtures(service.getColtures(project.getId()));
 
-            Node projectBlock = project.buildProjectPane(this::handleAddCultivation,(colture) -> {});
+            Node projectBlock = project.buildProjectPane(this::handleAddCultivation,this::handleCultivationClick);
             mainActivitiesContainer.getChildren().add(projectBlock);
+        }
+    }
+
+    private void handleCultivationClick(Colture cultivation) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/unina/biogarden/pane/activities-pane.fxml"));
+            Parent root = loader.load();
+            CultivationActivitiesController controller = loader.getController();
+
+            // Passa la coltivazione selezionata al controller della vista delle attività
+            controller.setCultivation(cultivation);
+
+            // Crea un nuovo Stage per la vista delle attività
+            Stage stage = new Stage();
+            stage.setTitle("Gestione Attività - " + cultivation.getCrop().nameProperty().get());
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.WINDOW_MODAL); // Puoi anche renderla una nuova finestra principale se preferisci
+            stage.initOwner(mainActivitiesContainer.getScene().getWindow());
+            stage.show(); // Mostra la nuova finestra
+
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Errore Caricamento Vista", "Impossibile caricare la vista delle attività per la coltivazione.");
+            e.printStackTrace();
         }
     }
 

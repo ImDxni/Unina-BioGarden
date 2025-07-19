@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.HBox?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.DatePicker?>
+
+<VBox spacing="15" alignment="CENTER"
+      xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.unina.biogarden.controller.form.CreateActivityFormController"
+      style="-fx-background-color: #ffffff; -fx-padding: 20;">
+
+    <Label text="Crea Nuova Attività Coltivazione"
+           style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-font-family: 'Inter', Arial; -fx-text-fill: #333;"/>
+
+    <VBox spacing="10" alignment="TOP_LEFT" maxWidth="300">
+        <Label text="Data Attività:"
+               style="-fx-font-size: 14px; -fx-font-weight: 500; -fx-text-fill: #555;"/>
+        <DatePicker fx:id="datePicker" prefWidth="300" promptText="Seleziona la data..."
+                    style="-fx-background-color: #f5f5f5; -fx-border-color: #e0e0e0; -fx-border-radius: 6;"/>
+
+        <Label text="Tipo di Attività:"
+               style="-fx-font-size: 14px; -fx-font-weight: 500; -fx-text-fill: #555;"/>
+        <JFXComboBox fx:id="activityTypeComboBox" prefWidth="300" promptText="Scegli il tipo di attività..."
+                     style="-jfx-focus-color: #4CAF50; -jfx-unfocus-color: #9E9E9E;"/>
+
+        <Label text="Coltivatore Responsabile:" style="-fx-font-size: 14px; -fx-font-weight: 500; -fx-text-fill: #555;"/>
+        <JFXComboBox fx:id="growerComboBox" prefWidth="300" promptText="Seleziona il coltivatore..." style="-jfx-focus-color: #4CAF50; -jfx-unfocus-color: #9E9E9E;"/>
+
+        <VBox fx:id="specificFieldsContainer" spacing="10" alignment="TOP_LEFT" style="-fx-padding: 10 0 0 0;"/>
+    </VBox>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <JFXButton text="Annulla" onAction="#cancel"
+                   style="-fx-background-color: #f0f0f0; -fx-text-fill: #333; -fx-font-weight: 600; -fx-background-radius: 6; -fx-pref-width: 90px; -fx-pref-height: 35px;"/>
+        <JFXButton text="Crea" onAction="#handleCreate"
+                   style="-fx-background-color: #43a047; -fx-text-fill: #fff; -fx-font-weight: 600; -fx-background-radius: 6; -fx-pref-width: 90px; -fx-pref-height: 35px;"/>
+    </HBox>
+</VBox>

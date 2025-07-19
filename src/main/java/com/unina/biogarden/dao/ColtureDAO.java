@@ -25,7 +25,7 @@ public class ColtureDAO {
 
             PGobject tipoUtenteObj = new PGobject();
             tipoUtenteObj.setType("StatoColtivazione");
-            tipoUtenteObj.setValue(ColtureStatus.SEEDED.getStatus().toLowerCase());
+            tipoUtenteObj.setValue(ColtureStatus.WAITING.getStatus().toLowerCase());
 
             stmnt.setObject(3, tipoUtenteObj);
             stmnt.setInt(4, idCrop);
@@ -50,12 +50,12 @@ public class ColtureDAO {
 
             while (rs.next()) {
                 ColtureDTO colture = new ColtureDTO(
-                        rs.getInt("id_coltivazione"),
-                        rs.getDate("data_inizio").toLocalDate(),
-                        ColtureStatus.fromString(rs.getString("stato")),
+                        rs.getInt(1),
+                        rs.getDate(2).toLocalDate(),
+                        ColtureStatus.fromString(rs.getString(3)),
                         projectId,
-                        rs.getInt("id_coltura"),
-                        rs.getString("tipologia")
+                        rs.getInt(4),
+                        rs.getString(5)
                 );
                 results.add(colture);
             }
@@ -66,4 +66,5 @@ public class ColtureDAO {
 
         return results;
     }
+
 }
