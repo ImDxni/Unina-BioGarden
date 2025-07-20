@@ -24,10 +24,16 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Controller per la dashboard dei report, in particolare per i report di raccolta.
+ * Permette di visualizzare un riepilogo delle raccolte tramite una tabella e un grafico,
+ * con la possibilità di filtrare i dati per lotto.
+ * @author Il Tuo Nome
+ */
 public class ReportsDashboardController {
 
     @FXML
-    private ComboBox<Lot> lotComboBox; // ComboBox per selezionare il lotto
+    private ComboBox<Lot> lotComboBox;
     @FXML
     private TableView<HarvestReportEntry> harvestSummaryTable;
     @FXML
@@ -47,11 +53,15 @@ public class ReportsDashboardController {
     @FXML
     private VBox chartContainer;
 
-    private ProjectService projectService = new ProjectService();
+    private final ProjectService projectService = new ProjectService();
 
+    /**
+     * Inizializza il controller dopo che il suo FXML è stato completamente caricato.
+     * Configura le colonne della tabella, popola la ComboBox dei lotti e imposta i listener
+     * per il caricamento dei dati del report.
+     */
     @FXML
     public void initialize() {
-        // Configura le colonne della tabella
         colLotName.setCellValueFactory(new PropertyValueFactory<>("lotName"));
         colCultivationName.setCellValueFactory(new PropertyValueFactory<>("cultivationName"));
         colTotalHarvests.setCellValueFactory(new PropertyValueFactory<>("totalHarvests"));
@@ -60,7 +70,6 @@ public class ReportsDashboardController {
         colMaxQuantity.setCellValueFactory(new PropertyValueFactory<>("maxQuantity"));
         colUnit.setCellValueFactory(new PropertyValueFactory<>("unit"));
 
-        // Formattazione per le quantità decimali
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         colAvgQuantity.setCellFactory(column -> new TableCell<>() {
             @Override
@@ -84,21 +93,17 @@ public class ReportsDashboardController {
             }
         });
 
-
-        // Popola la ComboBox dei lotti
         try {
             Collection<Lot> lots = projectService.fetchAllLots();
-            // Aggiungi un'opzione "Tutti i Lotti" all'inizio
             ObservableList<Lot> lotOptions = FXCollections.observableArrayList();
-            lotOptions.add(new Lot(0, "Tutti i Lotti", 0)); // Lotto fittizio per l'opzione "Tutti"
+            lotOptions.add(new Lot(0, "Tutti i Lotti", 0));
             lotOptions.addAll(lots);
             lotComboBox.setItems(lotOptions);
-            lotComboBox.getSelectionModel().selectFirst(); // Seleziona "Tutti i Lotti" di default
+            lotComboBox.getSelectionModel().selectFirst();
 
-            // Listener per la selezione del lotto
             lotComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
                 if (newVal != null) {
-                    loadReportData(newVal.getId() == 0 ? null : newVal.getId()); // Passa null se "Tutti i Lotti"
+                    loadReportData(newVal.getId() == 0 ? null : newVal.getId());
                 }
             });
 
@@ -107,13 +112,13 @@ public class ReportsDashboardController {
             e.printStackTrace();
         }
 
-        // Carica i dati iniziali (per tutti i lotti)
         loadReportData(null);
     }
 
     /**
-     * Carica i dati del report di raccolta e aggiorna la tabella e il grafico.
-     * @param lotId L'ID del lotto da filtrare, o null per tutti i lotti.
+     * Carica i dati del report di raccolta dal servizio e aggiorna la tabella e il grafico.
+     * I dati possono essere filtrati in base all'ID del lotto fornito.
+     * @param lotId L'ID del lotto da filtrare (se {@code null}, vengono caricati i dati per tutti i lotti).
      */
     private void loadReportData(Integer lotId) {
         try {
@@ -127,19 +132,20 @@ public class ReportsDashboardController {
     }
 
     /**
-     * Aggiorna il grafico a barre con i dati del report.
-     * @param reportData La lista di HarvestReportEntry da visualizzare nel grafico.
+     * Aggiorna il grafico a barre visualizzando la quantità media raccolta per ogni coltura.
+     * Il grafico viene generato utilizzando JFreeChart e incorporato nel {@code chartContainer}.
+     * Vengono inoltre impostati dei filtri per gli eventi del mouse e dello scroll sul grafico
+     * per disabilitare interazioni indesiderate.
+     * @param reportData La lista di {@link HarvestReportEntry} contenente i dati da visualizzare nel grafico.
      */
     private void updateChart(List<HarvestReportEntry> reportData) {
-        chartContainer.getChildren().clear(); // Pulisci il contenitore precedente
+        chartContainer.getChildren().clear();
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
         reportData.stream()
                 .sorted(Comparator.comparing(HarvestReportEntry::getCultivationName))
-                .forEach(entry -> {
-                    dataset.addValue(entry.getAvgQuantity(), "Quantità Media", entry.getCultivationName());
-                });
+                .forEach(entry -> dataset.addValue(entry.getAvgQuantity(), "Quantità Media", entry.getCultivationName()));
 
         JFreeChart barChart = ChartFactory.createBarChart(
                 "Quantità Media Raccolta per Coltura",

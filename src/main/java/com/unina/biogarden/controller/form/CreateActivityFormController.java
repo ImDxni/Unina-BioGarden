@@ -2,6 +2,7 @@ package com.unina.biogarden.controller.form;
 
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
+import com.unina.biogarden.enumerations.ActivityType;
 import com.unina.biogarden.models.Colture;
 import com.unina.biogarden.models.Farmer;
 import com.unina.biogarden.models.activity.Activity;
@@ -22,6 +23,14 @@ import javafx.scene.layout.VBox;
 import java.time.LocalDate;
 import java.util.Arrays;
 
+import static com.unina.biogarden.utils.Utils.firstCapitalLetter;
+
+/**
+ * Controller per il form di creazione di una nuova attività (Semina, Irrigazione, Raccolta)
+ * associata a una specifica coltivazione. Gestisce l'interfaccia utente, la validazione degli input
+ * e l'interazione con i servizi per la gestione del progetto e degli utenti.
+ * @author Il Tuo Nome
+ */
 public class CreateActivityFormController extends AbstractForm {
 
     @FXML
@@ -33,11 +42,9 @@ public class CreateActivityFormController extends AbstractForm {
     @FXML
     private VBox specificFieldsContainer;
 
-    // Campi per Semina
     private JFXTextField sowingQuantityField;
     private JFXTextField sowingUnitField;
 
-    // Campi per Raccolta
     private JFXTextField harvestPlannedQuantityField;
     private JFXTextField harvestActualQuantityField;
     private JFXTextField harvestUnitField;
@@ -47,16 +54,20 @@ public class CreateActivityFormController extends AbstractForm {
     private final ProjectService projectService = new ProjectService();
     private final UserService userService = new UserService();
 
+    /**
+     * Inizializza il controller dopo che il suo FXML è stato completamente caricato.
+     * Configura le ComboBox per i tipi di attività e i coltivatori, e imposta la data predefinita.
+     */
     @FXML
     public void initialize() {
-        activityTypeComboBox.setItems(FXCollections.observableArrayList(Arrays.asList("Semina", "Irrigazione", "Raccolta")));
+        activityTypeComboBox.setItems(FXCollections.observableArrayList(Arrays.stream(ActivityType.values()).map(obj -> firstCapitalLetter(obj.getDescription())).toList()));
+
         activityTypeComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             updateSpecificFields(newVal);
         });
 
         datePicker.setValue(LocalDate.now());
 
-        // Popola la ComboBox dei coltivatori
         try {
             growerComboBox.setItems(FXCollections.observableArrayList(userService.fetchAllFarmer()));
         } catch (RuntimeException e) {
@@ -64,33 +75,32 @@ public class CreateActivityFormController extends AbstractForm {
             e.printStackTrace();
         }
     }
-    // --- Metodi Mancanti Implementati ---
 
     /**
-     * Imposta la coltivazione corrente per la quale viene creata l'attività.
-     * Questo è fondamentale per associare l'attività al giusto oggetto Colture.
-     * @param cultivation La coltivazione selezionata.
+     * Imposta la coltivazione corrente per la quale verrà creata l'attività.
+     * È fondamentale per associare l'attività al giusto oggetto {@code Colture}.
+     * @param cultivation La coltivazione selezionata a cui associare la nuova attività.
      */
     public void setCurrentCultivation(Colture cultivation) {
         this.currentCultivation = cultivation;
     }
 
     /**
-     * Imposta la callback da eseguire dopo che un'attività è stata creata con successo.
-     * Tipicamente usata per ricaricare la tabella delle attività nella vista principale.
-     * @param onActivityCreated Un Runnable che verrà eseguito.
+     * Imposta un callback {@code Runnable} da eseguire dopo che un'attività è stata creata con successo.
+     * Questo è utile per aggiornare la vista chiamante o eseguire altre azioni post-creazione.
+     * @param onActivityCreated Un {@code Runnable} che verrà eseguito.
      */
     public void setOnActivityCreated(Runnable onActivityCreated) {
         this.onActivityCreated = onActivityCreated;
     }
 
     /**
-     * Aggiorna dinamicamente i campi di input nel form in base al tipo di attività selezionato.
-     * Nasconde i campi non necessari e mostra quelli specifici per il tipo di attività.
+     * Aggiorna dinamicamente i campi di input specifici nel form in base al tipo di attività selezionato.
+     * I campi non pertinenti vengono nascosti e quelli specifici per il tipo di attività vengono mostrati.
      * @param activityType Il tipo di attività selezionato (es. "Semina", "Irrigazione", "Raccolta").
      */
     private void updateSpecificFields(String activityType) {
-        specificFieldsContainer.getChildren().clear(); // Pulisci i campi precedenti
+        specificFieldsContainer.getChildren().clear();
 
         if (activityType == null) return;
 
@@ -100,7 +110,6 @@ public class CreateActivityFormController extends AbstractForm {
                 sowingQuantityField.setPromptText("Quantità Semi");
                 sowingQuantityField.setStyle("-jfx-focus-color: #4CAF50; -jfx-unfocus-color: #9E9E9E;");
                 sowingQuantityField.textProperty().addListener((observable, oldValue, newValue) -> {
-                    // Accetta solo numeri interi (o decimali se decidi di cambiare double)
                     if (!newValue.matches("\\d*")) {
                         sowingQuantityField.setText(newValue.replaceAll("[^\\d]", ""));
                     }
@@ -120,7 +129,6 @@ public class CreateActivityFormController extends AbstractForm {
                 harvestPlannedQuantityField.setPromptText("Quantità Prevista");
                 harvestPlannedQuantityField.setStyle("-jfx-focus-color: #4CAF50; -jfx-unfocus-color: #9E9E9E;");
                 harvestPlannedQuantityField.textProperty().addListener((observable, oldValue, newValue) -> {
-                    // Accetta solo numeri interi (o decimali se decidi di cambiare double)
                     if (!newValue.matches("\\d*")) {
                         harvestPlannedQuantityField.setText(newValue.replaceAll("[^\\d]", ""));
                     }
@@ -130,7 +138,6 @@ public class CreateActivityFormController extends AbstractForm {
                 harvestActualQuantityField.setPromptText("Quantità Effettiva");
                 harvestActualQuantityField.setStyle("-jfx-focus-color: #4CAF50; -jfx-unfocus-color: #9E9E9E;");
                 harvestActualQuantityField.textProperty().addListener((observable, oldValue, newValue) -> {
-                    // Accetta solo numeri interi (o decimali se decidi di cambiare double)
                     if (!newValue.matches("\\d*")) {
                         harvestActualQuantityField.setText(newValue.replaceAll("[^\\d]", ""));
                     }
@@ -147,20 +154,25 @@ public class CreateActivityFormController extends AbstractForm {
                 );
                 break;
             case "Irrigazione":
-                // Nessun campo aggiuntivo per l'irrigazione
                 break;
         }
     }
 
-
+    /**
+     * Gestisce l'evento di creazione di una nuova attività.
+     * Valida gli input del form, crea l'oggetto attività appropriato e lo aggiunge alla coltivazione corrente.
+     * In caso di successo, mostra un messaggio di conferma, esegue il callback {@code onActivityCreated} e chiude il form.
+     * In caso di errore, mostra un messaggio di avviso o errore.
+     * @param event L'evento di azione che ha scatenato la chiamata, solitamente da un bottone "Crea".
+     */
     @FXML
     @Override
     protected void handleCreate(ActionEvent event) {
         LocalDate date = datePicker.getValue();
         String activityType = activityTypeComboBox.getSelectionModel().getSelectedItem();
-        Farmer selectedGrower = growerComboBox.getSelectionModel().getSelectedItem(); // Recupera il grower selezionato
+        Farmer selectedGrower = growerComboBox.getSelectionModel().getSelectedItem();
 
-        if (date == null || activityType == null || selectedGrower == null) { // Aggiungi validazione per grower
+        if (date == null || activityType == null || selectedGrower == null) {
             Utils.showAlert(Alert.AlertType.WARNING, "Campi Mancanti", "Per favore, compila tutti i campi: data, tipo di attività e coltivatore.");
             return;
         }
@@ -180,10 +192,10 @@ public class CreateActivityFormController extends AbstractForm {
                     }
                     int sowingQuantity = Integer.parseInt(sowingQuantityField.getText());
                     String sowingUnit = sowingUnitField.getText();
-                    newActivity = new SeedingActivity(0, date, selectedGrower.getId(), selectedGrower.getFullName(), sowingQuantity, sowingUnit); // Passa selectedGrower
+                    newActivity = new SeedingActivity(0, date, selectedGrower.getId(), selectedGrower.getFullName(), sowingQuantity, sowingUnit);
                     break;
                 case "Irrigazione":
-                    newActivity = new IrrigationActivity(0, date, selectedGrower.getId(), selectedGrower.getFullName()); // Passa selectedGrower
+                    newActivity = new IrrigationActivity(0, date, selectedGrower.getId(), selectedGrower.getFullName());
                     break;
                 case "Raccolta":
                     if (harvestPlannedQuantityField.getText().isEmpty() || harvestActualQuantityField.getText().isEmpty() || harvestUnitField.getText().isEmpty()) {
@@ -193,7 +205,7 @@ public class CreateActivityFormController extends AbstractForm {
                     int planned = Integer.parseInt(harvestPlannedQuantityField.getText());
                     int actual = Integer.parseInt(harvestActualQuantityField.getText());
                     String harvestUnit = harvestUnitField.getText();
-                    newActivity = new HarvestingActivity(0, date, selectedGrower.getId(), selectedGrower.getFullName(), planned, actual, harvestUnit); // Passa selectedGrower
+                    newActivity = new HarvestingActivity(0, date, selectedGrower.getId(), selectedGrower.getFullName(), planned, actual, harvestUnit);
                     break;
             }
 
@@ -213,5 +225,4 @@ public class CreateActivityFormController extends AbstractForm {
             e.printStackTrace();
         }
     }
-
 }

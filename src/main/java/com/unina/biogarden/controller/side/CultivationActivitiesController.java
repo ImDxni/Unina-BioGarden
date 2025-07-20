@@ -25,6 +25,11 @@ import java.util.Collection;
 
 import static com.unina.biogarden.utils.Utils.firstCapitalLetter;
 
+/**
+ * Controller per la gestione e visualizzazione delle attività associate a una specifica coltivazione.
+ * Permette di visualizzare un elenco di attività, aggiungerne di nuove, modificarne ed eliminarne di esistenti.
+ * @author Il Tuo Nome
+ */
 public class CultivationActivitiesController {
 
     @FXML
@@ -42,17 +47,17 @@ public class CultivationActivitiesController {
     @FXML
     private TableColumn<Activity, String> colGrower;
     @FXML
-    private TableColumn<Activity, Void> colActions; // Colonna per i pulsanti di azione
+    private TableColumn<Activity, Void> colActions;
 
-    private Colture currentCultivation; // La coltivazione di cui stiamo gestendo le attività
-    private ProjectService projectService = new ProjectService(); // Il servizio per interagire con i dati
+    private Colture currentCultivation;
+    private ProjectService projectService = new ProjectService();
 
     /**
-     * Metodo chiamato per inizializzare il controller dopo che il FXML è stato caricato.
+     * Inizializza il controller dopo che il FXML è stato caricato.
+     * Configura le cell factory per le colonne della tabella delle attività.
      */
     @FXML
     public void initialize() {
-        // Configura le cell factory per le colonne della tabella
         colDate.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getDate()));
         colDate.setCellFactory(column -> new TableCell<>() {
             @Override
@@ -105,9 +110,8 @@ public class CultivationActivitiesController {
     }
 
     /**
-     * Imposta la coltivazione di cui mostrare le attività.
-     * Questo metodo deve essere chiamato dal controller chiamante (es. ActivitiesController).
-     *
+     * Imposta la coltivazione di cui si vogliono mostrare le attività.
+     * Questo metodo deve essere chiamato dal controller genitore per caricare le attività pertinenti.
      * @param cultivation La coltivazione selezionata.
      */
     public void setCultivation(Colture cultivation) {
@@ -118,18 +122,20 @@ public class CultivationActivitiesController {
 
     /**
      * Carica le attività della coltivazione corrente nella tabella.
+     * Pulisce la tabella e poi la ripopola con i dati più recenti dal servizio.
      */
     private void loadActivities() {
-        activitiesTable.setItems(FXCollections.observableArrayList()); // Pulisce la tabella prima di caricare i nuovi dati
+        activitiesTable.setItems(FXCollections.observableArrayList());
         if (currentCultivation != null) {
-            Collection<Activity> activities = projectService.fetchActivities(currentCultivation.getId()); // Assumi un getId() per Colture
+            Collection<Activity> activities = projectService.fetchActivities(currentCultivation.getId());
             activitiesTable.setItems(FXCollections.observableArrayList(activities));
         }
     }
 
     /**
      * Gestisce il click sul pulsante "Aggiungi Attività".
-     * Apre un form per la creazione di una nuova attività.
+     * Apre un form modale per la creazione di una nuova attività, passando la coltivazione corrente
+     * e impostando un callback per ricaricare le attività dopo la creazione.
      */
     @FXML
     private void handleAddActivity() {
@@ -138,9 +144,7 @@ public class CultivationActivitiesController {
             Parent root = loader.load();
             CreateActivityFormController controller = loader.getController();
 
-            // Passa la coltivazione corrente al form per l'associazione
             controller.setCurrentCultivation(currentCultivation);
-            // Imposta una callback per aggiornare la tabella dopo la creazione
             controller.setOnActivityCreated(this::loadActivities);
 
             Stage dialogStage = new Stage();
@@ -157,8 +161,9 @@ public class CultivationActivitiesController {
     }
 
     /**
-     * Gestisce la modifica di un'attività esistente.
-     *
+     * Gestisce l'apertura del form di modifica per un'attività esistente.
+     * Apre un form modale, pre-popolandolo con i dati dell'attività selezionata,
+     * e imposta un callback per ricaricare le attività dopo la modifica.
      * @param activity L'attività da modificare.
      */
     private void handleEditActivity(Activity activity) {
@@ -167,8 +172,8 @@ public class CultivationActivitiesController {
             Parent root = loader.load();
             EditActivityFormController controller = loader.getController();
 
-            controller.setActivity(activity); // Passa l'attività al controller del form di modifica
-            controller.setOnActivityUpdated(this::loadActivities); // Imposta la callback per ricaricare la tabella
+            controller.setActivity(activity);
+            controller.setOnActivityUpdated(this::loadActivities);
 
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Modifica Attività: " + activity.getType());
@@ -184,11 +189,11 @@ public class CultivationActivitiesController {
     }
 
     /**
-     * Gestisce l'eliminazione di un'attività.
-     *
+     * Gestisce l'eliminazione di un'attività selezionata.
+     * Chiama il servizio per eliminare l'attività dal database.
      * @param activity L'attività da eliminare.
      */
     private void handleDeleteActivity(Activity activity) {
-        projectService.deleteActivity(activity); // Assumi un metodo deleteActivity nel tuo servizio
+        projectService.deleteActivity(activity);
     }
 }

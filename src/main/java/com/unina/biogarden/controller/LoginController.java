@@ -1,7 +1,10 @@
 package com.unina.biogarden.controller;
 
 import com.unina.biogarden.dao.UserDAO;
+import com.unina.biogarden.dto.UserDTO;
+import com.unina.biogarden.enumerations.UserType;
 import com.unina.biogarden.service.UserService;
+import com.unina.biogarden.session.Session;
 import com.unina.biogarden.utils.Utils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,9 +16,10 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 /**
- * Controller for the user login view.
- * This class handles user interactions on the login screen, including
- * authenticating users and navigating to the registration view.
+ * Controller per la vista di login dell'utente.
+ * Questa classe gestisce le interazioni dell'utente nella schermata di login,
+ * inclusa l'autenticazione degli utenti e la navigazione alla vista di registrazione.
+ * @author Il Tuo Nome
  */
 public class LoginController {
 
@@ -29,9 +33,11 @@ public class LoginController {
     private Label errorLabel;
 
     /**
-     * Handles the action when the login button is pressed.
-     * It validates input fields, attempts to log in the user using {@link UserDAO},
-     * and displays appropriate error messages or proceeds with successful login.
+     * Gestisce l'azione quando il pulsante di login viene premuto.
+     * Valida i campi di input (email e password), tenta di autenticare l'utente
+     * tramite il {@link UserService}, e verifica il tipo di utente.
+     * Se l'autenticazione ha successo e l'utente non è un {@code FARMER},
+     * naviga alla vista della dashboard. Altrimenti, mostra un messaggio di errore appropriato.
      */
     @FXML
     private void onLogin() {
@@ -55,6 +61,13 @@ public class LoginController {
             return;
         }
 
+        UserDTO sessionUser = Session.getUtente();
+
+        if (sessionUser.tipo() == UserType.FARMER) {
+            errorLabel.setText("Accesso non autorizzato: l'utente è un agricoltore.");
+            errorLabel.setVisible(true);
+            return;
+        }
 
         System.out.println("Login effettuato con successo per l'utente: " + email);
 
@@ -68,9 +81,9 @@ public class LoginController {
     }
 
     /**
-     * Handles the action when the register link is clicked.
-     * It loads the registration view FXML and sets it as the new scene on the current stage,
-     * applying the predefined stylesheet.
+     * Gestisce l'azione quando viene cliccato il link di registrazione.
+     * Carica il file FXML della vista di registrazione e lo imposta come nuova scena sullo stage corrente,
+     * applicando il foglio di stile predefinito. Se il file FXML non può essere caricato, stampa lo stack trace.
      */
     @FXML
     private void onRegisterLink() {
@@ -79,8 +92,8 @@ public class LoginController {
             Stage stage = (Stage) emailField.getScene().getWindow();
             Utils.setSceneWithStylesheet(stage, loader.load());
         } catch (IOException e) {
-            e.printStackTrace(); // Log the exception in a real application
-            // TODO: Display an error message to the user
+            e.printStackTrace();
+            // TODO: Mostra un messaggio di errore all'utente se la vista di registrazione non può essere caricata.
         }
     }
 }

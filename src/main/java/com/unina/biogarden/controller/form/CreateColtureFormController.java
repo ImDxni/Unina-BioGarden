@@ -12,6 +12,11 @@ import javafx.scene.control.Alert;
 
 import static com.unina.biogarden.utils.Utils.showAlert;
 
+/**
+ * Controller per il form di creazione di una nuova coltura da aggiungere a un progetto esistente.
+ * Gestisce la selezione del tipo di coltura e l'interazione con il servizio per l'aggiunta.
+ * @author Il Tuo Nome
+ */
 public class CreateColtureFormController extends AbstractForm {
 
     @FXML
@@ -22,6 +27,10 @@ public class CreateColtureFormController extends AbstractForm {
     private Project targetProject;
     private Runnable onColtureCreated;
 
+    /**
+     * Inizializza il controller dopo che il suo FXML è stato completamente caricato.
+     * Popola la ComboBox con la lista delle colture disponibili.
+     */
     @FXML
     public void initialize() {
         try {
@@ -33,14 +42,30 @@ public class CreateColtureFormController extends AbstractForm {
         }
     }
 
+    /**
+     * Imposta il progetto di destinazione a cui la nuova coltura verrà aggiunta.
+     * @param targetProject Il progetto a cui aggiungere la coltura.
+     */
     public void setTargetProject(Project targetProject) {
         this.targetProject = targetProject;
     }
 
+    /**
+     * Imposta un callback {@code Runnable} da eseguire dopo che una coltura è stata creata con successo.
+     * Questo è utile per aggiornare la vista chiamante o eseguire altre azioni post-creazione.
+     * @param onColtureCreated Un {@code Runnable} che verrà eseguito.
+     */
     public void setOnColtureCreated(Runnable onColtureCreated) {
         this.onColtureCreated = onColtureCreated;
     }
 
+    /**
+     * Gestisce l'evento di creazione di una nuova coltura.
+     * Valida la selezione della coltura e il progetto di destinazione, quindi tenta di aggiungere la coltura al progetto.
+     * In caso di successo, esegue il callback {@code onColtureCreated} e chiude il form.
+     * In caso di errore (es. coltura già esistente o errore di runtime), mostra un messaggio di errore.
+     * @param event L'evento di azione che ha scatenato la chiamata, solitamente da un bottone "Crea".
+     */
     @FXML
     @Override
     protected void handleCreate(ActionEvent event) {
@@ -57,7 +82,6 @@ public class CreateColtureFormController extends AbstractForm {
         }
 
         try {
-
             service.addColture(targetProject, selectedCrop);
 
             if (onColtureCreated != null) {

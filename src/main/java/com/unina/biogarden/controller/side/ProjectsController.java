@@ -21,6 +21,12 @@ import java.io.IOException;
 
 import static com.unina.biogarden.utils.Utils.showAlert;
 
+/**
+ * Controller per la gestione e visualizzazione dei progetti e delle coltivazioni associate.
+ * Permette di visualizzare i progetti, aggiungere nuove coltivazioni a un progetto
+ * e visualizzare le attività di una specifica coltivazione.
+ * @author Il Tuo Nome
+ */
 public class ProjectsController {
 
     @FXML
@@ -28,40 +34,49 @@ public class ProjectsController {
 
     private final ProjectService service = new ProjectService();
 
-
+    /**
+     * Inizializza il controller dopo che il suo FXML è stato completamente caricato.
+     * Carica e visualizza i progetti esistenti nella schermata principale.
+     */
     @FXML
     public void initialize() {
         loadActivities();
     }
 
+    /**
+     * Carica tutti i progetti e le rispettive coltivazioni dal servizio
+     * e li visualizza dinamicamente nel {@code mainActivitiesContainer}.
+     * Ogni progetto è rappresentato da un blocco che include le sue coltivazioni.
+     */
     private void loadActivities() {
         mainActivitiesContainer.getChildren().clear();
 
         for (Project project : service.getProjects()) {
-
             project.setColtures(service.getColtures(project.getId()));
-
             Node projectBlock = project.buildProjectPane(this::handleAddCultivation, this::handleCultivationClick);
             mainActivitiesContainer.getChildren().add(projectBlock);
         }
     }
 
+    /**
+     * Gestisce il click su una coltivazione specifica.
+     * Apre una nuova finestra modale che mostra i dettagli e le attività della coltivazione selezionata.
+     * @param cultivation La coltivazione su cui è stato cliccato.
+     */
     private void handleCultivationClick(Colture cultivation) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/unina/biogarden/pane/activities-pane.fxml"));
             Parent root = loader.load();
             CultivationActivitiesController controller = loader.getController();
 
-            // Passa la coltivazione selezionata al controller della vista delle attività
             controller.setCultivation(cultivation);
 
-            // Crea un nuovo Stage per la vista delle attività
             Stage stage = new Stage();
             stage.setTitle("Gestione Attività - " + cultivation.getCrop().nameProperty().get());
             stage.setScene(new Scene(root));
-            stage.initModality(Modality.WINDOW_MODAL); // Puoi anche renderla una nuova finestra principale se preferisci
+            stage.initModality(Modality.WINDOW_MODAL);
             stage.initOwner(mainActivitiesContainer.getScene().getWindow());
-            stage.show(); // Mostra la nuova finestra
+            stage.show();
 
         } catch (IOException e) {
             showAlert(Alert.AlertType.ERROR, "Errore Caricamento Vista", "Impossibile caricare la vista delle attività per la coltivazione.");
@@ -69,15 +84,20 @@ public class ProjectsController {
         }
     }
 
+    /**
+     * Gestisce l'azione di aggiunta di una nuova coltivazione a un progetto.
+     * Apre un form modale per la creazione di una coltura, pre-impostando il progetto di destinazione
+     * e impostando un callback per ricaricare i progetti dopo la creazione della coltura.
+     * @param actionEvent L'evento che ha scatenato la chiamata, solitamente il click su un bottone.
+     */
     public void handleAddCultivation(ActionEvent actionEvent) {
         JFXButton clickedButton = (JFXButton) actionEvent.getSource();
         int projectId = (Integer) clickedButton.getUserData();
         Project projectToAddTo = service.fetchProjectById(projectId);
 
-
         if (projectToAddTo != null) {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/unina/biogarden/form/colture-form-view.fxml")); // Percorso corretto del FXML
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/unina/biogarden/form/colture-form-view.fxml"));
                 Parent root = loader.load();
                 CreateColtureFormController formController = loader.getController();
 
@@ -98,6 +118,11 @@ public class ProjectsController {
         }
     }
 
+    /**
+     * Gestisce l'azione del bottone "Nuovo Progetto".
+     * Apre un form modale per la creazione di un nuovo progetto.
+     * Imposta un callback per ricaricare la lista dei progetti una volta che il nuovo progetto è stato creato.
+     */
     @FXML
     private void handleNewProjectButton() {
         try {
@@ -118,6 +143,4 @@ public class ProjectsController {
             showAlert(Alert.AlertType.ERROR, "Errore Apertura Form", "Impossibile aprire il form di creazione progetto.");
         }
     }
-
-
 }

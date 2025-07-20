@@ -1,16 +1,18 @@
 package com.unina.biogarden.exceptions;
 
 /**
- * Exception thrown when a login attempt fails, typically due to incorrect credentials.
- * This is a checked exception, meaning it must be declared in a method's throws clause
- * or handled within a try-catch block.
+ * Eccezione lanciata quando un tentativo di login fallisce, tipicamente a causa di credenziali non corrette.
+ * Questa è un'eccezione controllata (checked exception), il che significa che deve essere dichiarata
+ * nella clausola {@code throws} di un metodo o gestita all'interno di un blocco {@code try-catch}.
+ * @author Il Tuo Nome
  */
 public class LoginFallitoException extends Exception {
 
     /**
-     * Constructs a new LoginFallitoException with the specified detail message.
+     * Costruisce una nuova istanza di {@code LoginFallitoException} con il messaggio di dettaglio specificato.
+     * Il messaggio è inteso a fornire maggiori informazioni sulla causa del fallimento del login.
      *
-     * @param message The detail message (which is saved for later retrieval by the {@link Throwable#getMessage()} method).
+     * @param message Il messaggio di dettaglio (che può essere recuperato in seguito tramite il metodo {@link Throwable#getMessage()}).
      */
     public LoginFallitoException(String message) {
         super(message);

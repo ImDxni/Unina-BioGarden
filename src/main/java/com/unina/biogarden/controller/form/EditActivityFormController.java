@@ -24,6 +24,12 @@ import java.util.Arrays;
 
 import static com.unina.biogarden.utils.Utils.firstCapitalLetter;
 
+/**
+ * Controller per il form di modifica di un'attività esistente.
+ * Permette di aggiornare la data, il coltivatore, lo stato e i campi specifici
+ * di un'attività (Semina, Irrigazione, Raccolta).
+ * @author Il Tuo Nome
+ */
 public class EditActivityFormController extends AbstractForm {
 
     @FXML
@@ -33,15 +39,13 @@ public class EditActivityFormController extends AbstractForm {
     @FXML
     private JFXComboBox<Farmer> farmerComboBox;
     @FXML
-    private JFXComboBox<ActivityStatus> activityStatusComboBox; // NUOVO FXML FIELD
+    private JFXComboBox<ActivityStatus> activityStatusComboBox;
     @FXML
     private VBox specificFieldsContainer;
 
-    // Campi per Semina
     private JFXTextField sowingQuantityField;
     private JFXTextField sowingUnitField;
 
-    // Campi per Raccolta
     private JFXTextField harvestPlannedQuantityField;
     private JFXTextField harvestActualQuantityField;
     private JFXTextField harvestUnitField;
@@ -51,11 +55,14 @@ public class EditActivityFormController extends AbstractForm {
     private final ProjectService projectService = new ProjectService();
     private final UserService userService = new UserService();
 
+    /**
+     * Inizializza il controller dopo che il suo FXML è stato completamente caricato.
+     * Popola la ComboBox dei coltivatori e la ComboBox dello stato dell'attività.
+     */
     @FXML
     public void initialize() {
         try {
             farmerComboBox.setItems(FXCollections.observableArrayList(userService.fetchAllFarmer()));
-            // Popola la ComboBox dello stato dell'attività
             activityStatusComboBox.setItems(FXCollections.observableArrayList(Arrays.asList(ActivityStatus.values())));
         } catch (RuntimeException e) {
             Utils.showAlert(Alert.AlertType.ERROR, "Errore Caricamento", "Impossibile caricare i dati: " + e.getMessage());
@@ -63,14 +70,18 @@ public class EditActivityFormController extends AbstractForm {
         }
     }
 
+    /**
+     * Imposta l'attività corrente da modificare nel form.
+     * Popola tutti i campi del form con i dati dell'attività fornita,
+     * inclusi i campi generici e quelli specifici in base al tipo di attività.
+     * @param activity L'attività da modificare.
+     */
     public void setActivity(Activity activity) {
         this.currentActivity = activity;
 
-        // Popola i campi generici
         datePicker.setValue(currentActivity.getDate());
         activityTypeLabel.setText(firstCapitalLetter(currentActivity.getType().getDescription()));
 
-        // Seleziona il coltivatore
         Farmer currentFarmer = null;
         for (Farmer farmer : farmerComboBox.getItems()) {
             if (farmer.getFullName().equals(currentActivity.getFarmer())) {
@@ -82,17 +93,12 @@ public class EditActivityFormController extends AbstractForm {
             farmerComboBox.getSelectionModel().select(currentFarmer);
         } else {
             Utils.showAlert(Alert.AlertType.WARNING, "Coltivatore Non Trovato", "Il coltivatore associato all'attività (" + currentActivity.getFarmer() + ") non è stato trovato nell'elenco disponibile.");
-            // Potresti voler deselezionare la ComboBox o impostare un valore di default qui
         }
 
-        // Seleziona lo stato dell'attività
         activityStatusComboBox.getSelectionModel().select(currentActivity.getStatus());
 
-
-        // Popola i campi specifici in base al tipo di attività
         updateSpecificFields(currentActivity.getType());
 
-        // Prepopola i campi specifici
         switch (currentActivity.getType()) {
             case SEEDING:
                 SeedingActivity sowing = (SeedingActivity) currentActivity;
@@ -106,15 +112,24 @@ public class EditActivityFormController extends AbstractForm {
                 harvestUnitField.setText(harvest.getUnit());
                 break;
             case IRRIGATION:
-                // Nessun campo specifico da prepopolare
                 break;
         }
     }
 
+    /**
+     * Imposta un callback {@code Runnable} da eseguire dopo che l'attività è stata aggiornata con successo.
+     * Questo è utile per ricaricare la tabella delle attività nella vista principale.
+     * @param onActivityUpdated Un {@code Runnable} che verrà eseguito.
+     */
     public void setOnActivityUpdated(Runnable onActivityUpdated) {
         this.onActivityUpdated = onActivityUpdated;
     }
 
+    /**
+     * Aggiorna dinamicamente i campi di input specifici nel form in base al tipo di attività.
+     * Nasconde i campi non necessari e mostra quelli specifici per il tipo di attività.
+     * @param activityType Il tipo di attività per cui visualizzare i campi specifici.
+     */
     private void updateSpecificFields(ActivityType activityType) {
         specificFieldsContainer.getChildren().clear();
 
@@ -127,7 +142,7 @@ public class EditActivityFormController extends AbstractForm {
                 sowingQuantityField.setStyle("-jfx-focus-color: #4CAF50; -jfx-unfocus-color: #9E9E9E;");
                 sowingQuantityField.textProperty().addListener((observable, oldValue, newValue) -> {
                     if (!newValue.matches("\\d*")) {
-                        sowingQuantityField.setText(newValue.replaceAll("[^\\d]", ""));
+                        sowingQuantityField.setText(newValue.replaceAll("\\D", ""));
                     }
                 });
 
@@ -146,7 +161,7 @@ public class EditActivityFormController extends AbstractForm {
                 harvestPlannedQuantityField.setStyle("-jfx-focus-color: #4CAF50; -jfx-unfocus-color: #9E9E9E;");
                 harvestPlannedQuantityField.textProperty().addListener((observable, oldValue, newValue) -> {
                     if (!newValue.matches("\\d*")) {
-                        harvestPlannedQuantityField.setText(newValue.replaceAll("[^\\d]", ""));
+                        harvestPlannedQuantityField.setText(newValue.replaceAll("\\D", ""));
                     }
                 });
 
@@ -155,7 +170,7 @@ public class EditActivityFormController extends AbstractForm {
                 harvestActualQuantityField.setStyle("-jfx-focus-color: #4CAF50; -jfx-unfocus-color: #9E9E9E;");
                 harvestActualQuantityField.textProperty().addListener((observable, oldValue, newValue) -> {
                     if (!newValue.matches("\\d*")) {
-                        harvestActualQuantityField.setText(newValue.replaceAll("[^\\d]", ""));
+                        harvestActualQuantityField.setText(newValue.replaceAll("\\D", ""));
                     }
                 });
 
@@ -170,19 +185,26 @@ public class EditActivityFormController extends AbstractForm {
                 );
                 break;
             case IRRIGATION:
-                // Nessun campo aggiuntivo
                 break;
         }
     }
 
+    /**
+     * Gestisce l'evento di salvataggio delle modifiche all'attività.
+     * Valida gli input del form, aggiorna l'oggetto {@code currentActivity} con i nuovi valori,
+     * e tenta di persistere le modifiche tramite il servizio.
+     * In caso di successo, mostra un messaggio di conferma, esegue il callback {@code onActivityUpdated} e chiude il form.
+     * Gestisce anche errori di validazione dell'input e altri errori di runtime.
+     * @param event L'evento di azione che ha scatenato la chiamata, solitamente da un bottone "Salva".
+     */
     @FXML
     protected void handleCreate(ActionEvent event) {
         LocalDate date = datePicker.getValue();
-        ActivityType activityType = currentActivity.getType(); // Tipo fisso
+        ActivityType activityType = currentActivity.getType();
         Farmer selectedFarmer = farmerComboBox.getSelectionModel().getSelectedItem();
-        ActivityStatus selectedStatus = activityStatusComboBox.getSelectionModel().getSelectedItem(); // Recupera lo stato selezionato
+        ActivityStatus selectedStatus = activityStatusComboBox.getSelectionModel().getSelectedItem();
 
-        if (date == null || selectedFarmer == null || selectedStatus == null) { // Aggiungi validazione per lo stato
+        if (date == null || selectedFarmer == null || selectedStatus == null) {
             Utils.showAlert(Alert.AlertType.WARNING, "Campi Mancanti", "Per favore, compila la data, seleziona il coltivatore e lo stato dell'attività.");
             return;
         }
@@ -194,7 +216,7 @@ public class EditActivityFormController extends AbstractForm {
         try {
             currentActivity.setDate(date);
             currentActivity.setFarmer(selectedFarmer.getFullName());
-            currentActivity.setStatus(selectedStatus); // Imposta il nuovo stato
+            currentActivity.setStatus(selectedStatus);
 
             switch (activityType) {
                 case SEEDING:
@@ -207,7 +229,6 @@ public class EditActivityFormController extends AbstractForm {
                     sowing.setUnit(sowingUnitField.getText());
                     break;
                 case IRRIGATION:
-                    // Nessun campo specifico da aggiornare
                     break;
                 case HARVEST:
                     if (harvestPlannedQuantityField == null || harvestPlannedQuantityField.getText().isEmpty() ||

@@ -16,19 +16,26 @@ import java.util.Arrays;
 import java.util.Base64;
 
 /**
- * Utility class for password encryption and verification, and for UI-related helper methods in a JavaFX application.
- * This class provides methods to securely encrypt passwords using PBKDF2WithHmacSHA1
- * and to verify a given password against a stored encrypted password.
- * It also includes a utility method to set a JavaFX scene with a predefined stylesheet.
+ * Classe di utilità che fornisce metodi per la crittografia e verifica delle password,
+ * e per funzionalità ausiliarie relative all'interfaccia utente JavaFX.
+ * Questa classe offre metodi per crittografare in modo sicuro le password usando
+ * l'algoritmo PBKDF2WithHmacSHA1 e per verificare una password data rispetto a una
+ * password crittografata memorizzata. Include inoltre metodi di utilità per
+ * impostare scene JavaFX con un foglio di stile predefinito e per mostrare avvisi.
+ * @author Il Tuo Nome
  */
 public class Utils {
 
     /**
-     * Encrypts a plain-text password using a randomly generated salt and PBKDF2WithHmacSHA1.
-     * The salt is prepended to the hashed password, separated by a colon, and both are Base64 encoded.
+     * Cripta una password in chiaro utilizzando un salt generato casualmente
+     * e l'algoritmo PBKDF2WithHmacSHA1.
+     * Il salt viene anteposto all'hash della password, separato da due punti,
+     * ed entrambi sono codificati in Base64.
      *
-     * @param password The plain-text password to encrypt.
-     * @return A Base64 encoded string containing the salt and the hashed password, separated by a colon (e.g., "saltBase64:hashBase64").
+     * @param password La password in chiaro da criptare.
+     * @return Una stringa codificata in Base64 contenente il salt e l'hash della password,
+     * separati da due punti (es. "saltBase64:hashBase64").
+     * @throws RuntimeException Se si verificano problemi con gli algoritmi di crittografia sottostanti.
      */
     public static String encryptPassword(String password) {
         SecureRandom random = new SecureRandom();
@@ -43,19 +50,20 @@ public class Utils {
     }
 
     /**
-     * Verifies a plain-text password against a stored encrypted password.
-     * It extracts the salt and hash from the stored password, re-hashes the given password with the extracted salt,
-     * and compares the newly computed hash with the stored hash.
+     * Verifica una password in chiaro rispetto a una password crittografata memorizzata.
+     * Estrae il salt e l'hash dalla password memorizzata, ricalcola l'hash della password
+     * fornita con il salt estratto e confronta l'hash appena calcolato con quello memorizzato.
      *
-     * @param password The plain-text password to verify.
-     * @param storedPassword The stored encrypted password string (in "saltBase64:hashBase64" format).
-     * @return true if the password matches the stored encrypted password, false otherwise.
-     * @throws IllegalArgumentException If the format of the stored password is invalid.
+     * @param password La password in chiaro da verificare.
+     * @param storedPassword La stringa della password crittografata memorizzata (nel formato "saltBase64:hashBase64").
+     * @return {@code true} se la password corrisponde a quella crittografata memorizzata, {@code false} altrimenti.
+     * @throws IllegalArgumentException Se il formato della password memorizzata non è valido.
+     * @throws RuntimeException Se si verificano problemi con gli algoritmi di crittografia sottostanti.
      */
     public static boolean verifyPassword(String password, String storedPassword) {
         String[] parts = storedPassword.split(":");
         if (parts.length != 2) {
-            throw new IllegalArgumentException("Stored password format is invalid");
+            throw new IllegalArgumentException("Il formato della password memorizzata non è valido");
         }
 
         byte[] salt = Base64.getDecoder().decode(parts[0]);
@@ -67,13 +75,13 @@ public class Utils {
     }
 
     /**
-     * Hashes a password using PBKDF2WithHmacSHA1 with a given salt.
-     * This is a private helper method used internally for both encryption and verification processes.
+     * Calcola l'hash di una password utilizzando PBKDF2WithHmacSHA1 con un salt dato.
+     * Questo è un metodo helper privato utilizzato internamente sia per i processi di crittografia che di verifica.
      *
-     * @param password The plain-text password to hash.
-     * @param salt The salt to use for hashing.
-     * @return The hashed password as a byte array.
-     * @throws RuntimeException If a suitable cryptographic algorithm is not found or key specification is invalid.
+     * @param password La password in chiaro di cui calcolare l'hash.
+     * @param salt Il salt da utilizzare per l'hashing.
+     * @return L'hash della password come array di byte.
+     * @throws RuntimeException Se non viene trovato un algoritmo crittografico adatto o la specifica della chiave non è valida.
      */
     private static byte[] encrypt(String password, byte[] salt) {
         KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
@@ -81,42 +89,58 @@ public class Utils {
         try {
             factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Errore nell'ottenimento dell'algoritmo di crittografia PBKDF2WithHmacSHA1", e);
         }
 
         byte[] computedHash;
         try {
             computedHash = factory.generateSecret(spec).getEncoded();
         } catch (InvalidKeySpecException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Errore nella generazione della chiave segreta", e);
         }
 
         return computedHash;
     }
 
     /**
-     * Sets a new scene on the given stage and applies a default stylesheet.
-     * This method is useful for consistently styling different views in a JavaFX application.
+     * Imposta una nuova scena sullo stage fornito e applica un foglio di stile predefinito.
+     * Questo metodo è utile per stilare in modo consistente diverse viste in un'applicazione JavaFX.
+     * La scena viene anche centrata sullo schermo.
      *
-     * @param stage The {@link Stage} on which to set the new scene.
-     * @param root The {@link Parent} node that serves as the root of the new scene's content graph.
+     * @param stage Lo {@link Stage} su cui impostare la nuova scena.
+     * @param root Il nodo {@link Parent} che funge da radice del grafo del contenuto della nuova scena.
      */
     public static void setSceneWithStylesheet(Stage stage, Parent root) {
         Scene scene = new Scene(root);
+        // Assicurati che il percorso del foglio di stile sia corretto e accessibile
         scene.getStylesheets().add(BioGarden.class.getResource("/com/unina/biogarden/style.css").toExternalForm());
         stage.setScene(scene);
         stage.centerOnScreen();
     }
 
-
+    /**
+     * Mostra un messaggio di avviso (Alert) all'utente.
+     *
+     * @param type Il tipo di avviso (es. {@link Alert.AlertType#ERROR}, {@link Alert.AlertType#INFORMATION}).
+     * @param title Il titolo della finestra di avviso.
+     * @param message Il messaggio di contenuto dell'avviso.
+     */
     public static void showAlert(Alert.AlertType type, String title, String message) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
-        alert.setHeaderText(null);
+        alert.setHeaderText(null); // Non usiamo un header testuale separato
         alert.setContentText(message);
-        alert.showAndWait();
+        alert.showAndWait(); // Mostra l'avviso e attende che l'utente lo chiuda
     }
 
+    /**
+     * Converte la prima lettera di una stringa in maiuscolo e le restanti in minuscolo.
+     * Se la stringa è nulla o vuota, viene restituita così com'è.
+     *
+     * @param s La stringa da modificare.
+     * @return La stringa con la prima lettera maiuscola e le successive minuscole,
+     * o la stringa originale se nulla o vuota.
+     */
     public static String firstCapitalLetter(String s) {
         if (s == null || s.isEmpty()) {
             return s;

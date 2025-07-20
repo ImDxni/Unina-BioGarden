@@ -3,18 +3,30 @@ package com.unina.biogarden.dto;
 import com.unina.biogarden.enumerations.UserType;
 
 /**
- * Data Transfer Object (DTO) for representing a user.
- * This class encapsulates user data, providing a clean way to transfer it between different layers of the application.
+ * Data Transfer Object (DTO) che rappresenta un utente nel sistema BioGarden.
+ * Questa è una classe record immutabile che incapsula i dati dell'utente,
+ * fornendo un modo pulito per trasferirli tra i diversi strati dell'applicazione.
+ *
+ * @param id L'identificatore univoco dell'utente.
+ * @param nome Il nome dell'utente.
+ * @param cognome Il cognome dell'utente.
+ * @param password La password dell'utente (generalmente hashata per sicurezza).
+ * @param email L'indirizzo email dell'utente (deve essere unico).
+ * @param tipo Il tipo o ruolo dell'utente (es. {@link UserType#ADMIN}, {@link UserType#RESEARCHER}, {@link UserType#FARMER}).
+ * @author Il Tuo Nome
  */
 public record UserDTO(
-        int id,          // Unique identifier for the user
-        String nome,    // First name of the user
-        String cognome, // Last name of the user
-        String password, // Password of the user
-        String email,   // Email address of the user (must be unique)
-        UserType tipo     // Type or role of the user (e.g., admin, regular user)
+        int id,
+        String nome,
+        String cognome,
+        String password,
+        String email,
+        UserType tipo
 ) {
-
+    /**
+     * Restituisce il nome completo dell'utente, combinando nome e cognome.
+     * @return Una stringa che rappresenta il nome completo dell'utente.
+     */
     public String getFullName() {
         return nome + " " + cognome;
     }

@@ -13,9 +13,23 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Data Access Object (DAO) per la gestione delle operazioni relative alle colture nel database.
+ * Questa classe fornisce metodi per aggiungere nuove colture e recuperare colture esistenti,
+ * interagendo con il database tramite {@link ConnectionManager}.
+ * @author Il Tuo Nome
+ */
 public class ColtureDAO {
     private final DataSource dataSource = ConnectionManager.getDataSource();
 
+    /**
+     * Aggiunge una nuova coltura al database per un progetto specificato.
+     * La coltura viene inizializzata con la data corrente e lo stato {@code WAITING}.
+     * @param idProgetto L'ID del progetto a cui aggiungere la coltura.
+     * @param idCrop L'ID del tipo di coltura (es. pomodoro, basilico).
+     * @throws ColtureAlreadyExists Se esiste già una coltura dello stesso tipo in quel progetto.
+     * @throws RuntimeException Se si verifica un errore SQL durante l'aggiunta della coltura.
+     */
     public void addColtura(int idProgetto, int idCrop) throws ColtureAlreadyExists {
         try (Connection conn = dataSource.getConnection()) {
             CallableStatement stmnt = conn.prepareCall("{? = call CreaColtivazione(?, ?, ?, ?)}");
@@ -40,6 +54,12 @@ public class ColtureDAO {
         }
     }
 
+    /**
+     * Recupera una collezione di {@link ColtureDTO} associate a un progetto specifico.
+     * @param projectId L'ID del progetto di cui recuperare le colture.
+     * @return Una {@link Collection} di {@link ColtureDTO} che rappresenta le colture del progetto.
+     * @throws RuntimeException Se si verifica un errore SQL durante il recupero delle colture.
+     */
     public Collection<ColtureDTO> fetchColtures(int projectId) {
         List<ColtureDTO> results = new ArrayList<>();
 
@@ -66,5 +86,4 @@ public class ColtureDAO {
 
         return results;
     }
-
 }

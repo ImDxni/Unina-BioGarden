@@ -3,48 +3,55 @@ package com.unina.biogarden.session;
 import com.unina.biogarden.dto.UserDTO;
 
 /**
- * Manages the current user session.
- * This class implements a singleton pattern to hold the details of the currently logged-in user
- * and provides methods for login, logout, retrieving the current user, and checking authentication status.
+ * Gestisce la sessione utente corrente nell'applicazione BioGarden.
+ * Questa classe implementa il pattern **Singleton** per mantenere i dettagli
+ * dell'utente attualmente loggato e fornisce metodi per il login, il logout,
+ * il recupero dell'utente corrente e la verifica dello stato di autenticazione.
+ * @author Il Tuo Nome
  */
 public class Session {
     private static UserDTO currentuser;
 
     /**
-     * Private constructor to prevent direct instantiation, enforcing the singleton pattern.
+     * Costruttore privato per prevenire l'istanziazione diretta,
+     * garantendo il rispetto del pattern Singleton.
      */
     private Session() {
     }
 
     /**
-     * Sets the current user for the session, effectively logging them in.
+     * Imposta l'utente corrente per la sessione, effettuando il login.
      *
-     * @param utente The {@link UserDTO} object representing the user who has successfully logged in.
+     * @param utente L'oggetto {@link UserDTO} che rappresenta l'utente
+     * che ha effettuato l'accesso con successo.
      */
     public static void login(UserDTO utente) {
         currentuser = utente;
     }
 
     /**
-     * Retrieves the currently logged-in user.
+     * Recupera l'utente attualmente loggato nella sessione.
      *
-     * @return The {@link UserDTO} object of the current user, or null if no user is logged in.
+     * @return L'oggetto {@link UserDTO} dell'utente corrente,
+     * o {@code null} se nessun utente è loggato.
      */
     public static UserDTO getUtente() {
         return currentuser;
     }
 
     /**
-     * Clears the current user from the session, effectively logging them out.
+     * Cancella l'utente corrente dalla sessione, effettuando il logout.
+     * Dopo questa operazione, {@link #isAuthenticated()} restituirà {@code false}.
      */
     public static void logout() {
         currentuser = null;
     }
 
     /**
-     * Checks if there is a user currently authenticated in the session.
+     * Verifica se c'è un utente attualmente autenticato nella sessione.
      *
-     * @return true if a user is logged in (i.e., {@code currentuser} is not null), false otherwise.
+     * @return {@code true} se un utente è loggato (cioè, {@code currentuser} non è null),
+     * {@code false} altrimenti.
      */
     public static boolean isAuthenticated() {
         return currentuser != null;

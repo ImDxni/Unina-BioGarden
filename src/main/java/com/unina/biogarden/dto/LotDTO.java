@@ -1,12 +1,18 @@
 package com.unina.biogarden.dto;
 
 /**
- * Represents a Data Transfer Object (DTO) for a 'lotto' (lot/plot of land).
- * Used to transfer data related to a lot between different application layers.
+ * Data Transfer Object (DTO) che rappresenta un lotto di terreno nel sistema BioGarden.
+ * Questa è una classe record immutabile utilizzata per trasferire dati relativi a un lotto
+ * tra i diversi strati dell'applicazione.
+ *
+ * @param id L'identificatore univoco del lotto.
+ * @param nome Il nome assegnato al lotto.
+ * @param area L'area del lotto, espressa in metri quadrati.
+ * @author Il Tuo Nome
  */
 public record LotDTO(
-        int id,          // Unique identifier for the lot
-        String nome,    // Name of the lot
-        int area        // Area of the lot in square meters
+        int id,
+        String nome,
+        int area
 ) {
 }
