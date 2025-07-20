@@ -103,7 +103,7 @@ public class RegisterController {
         String email = emailField.getText();
         String password = passwordField.getText();
 
-        if(nome.isEmpty() || cognome.isEmpty() || email.isEmpty() || password.isEmpty()){
+        if (nome.isEmpty() || cognome.isEmpty() || email.isEmpty() || password.isEmpty()) {
             errorLabel.setVisible(true);
             errorLabel.setText("Compila tutti i campi!");
             return;
@@ -118,14 +118,14 @@ public class RegisterController {
         String tipo = tipologiaCombo.getValue();
 
         UserService service = new UserService();
-        try{
+        try {
 
-            service.insert(new UserDTO(1,nome, cognome, email, password, UserType.fromString(tipo)));
+            service.insert(new UserDTO(1, nome, cognome, email, password, UserType.fromString(tipo)));
 
             System.out.println("Utente registrato!");
 
             onLoginLink();
-        }catch(UtenteEsistenteException ex){
+        } catch (UtenteEsistenteException ex) {
             errorLabel.setVisible(true);
             errorLabel.setText("Esiste già un utente con questo indirizzo");
         } catch (RuntimeException e) {

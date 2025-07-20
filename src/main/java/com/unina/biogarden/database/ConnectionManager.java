@@ -36,7 +36,8 @@ public class ConnectionManager {
     /**
      * Private constructor to prevent direct instantiation of this utility class.
      */
-    private ConnectionManager() {}
+    private ConnectionManager() {
+    }
 
     /**
      * Returns the HikariCP {@link DataSource} instance.

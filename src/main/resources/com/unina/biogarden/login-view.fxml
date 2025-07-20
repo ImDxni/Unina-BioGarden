@@ -1,42 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Hyperlink?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-
-<AnchorPane fx:controller="com.unina.biogarden.controller.LoginController" prefHeight="400.0" prefWidth="350.0" style="-fx-background-color: #fef9db;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/24.0.1">
-    <VBox alignment="CENTER" spacing="24" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+<?import javafx.scene.layout.*?>
+<AnchorPane fx:controller="com.unina.biogarden.controller.LoginController" prefHeight="400.0" prefWidth="350.0"
+            style="-fx-background-color: #fef9db;" xmlns:fx="http://javafx.com/fxml/1"
+            xmlns="http://javafx.com/javafx/24.0.1">
+    <VBox alignment="CENTER" spacing="24" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0"
+          AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
 
         <!-- LOGO -->
         <ImageView fitHeight="80.0" fitWidth="80.0">
             <image>
-                <Image url="@../../../logo.png" /> <!-- metti qui il path del tuo logo -->
+                <Image url="@../../../logo.png"/> <!-- metti qui il path del tuo logo -->
             </image>
         </ImageView>
 
         <!-- Titolo -->
-        <Label style="-fx-font-size: 20px; -fx-text-fill: #388e3c; -fx-font-weight: bold;" text="Bio Garden" />
+        <Label style="-fx-font-size: 20px; -fx-text-fill: #388e3c; -fx-font-weight: bold;" text="Bio Garden"/>
 
         <!-- Form Login -->
         <VBox alignment="CENTER" maxWidth="240" spacing="14">
-            <TextField fx:id="emailField" promptText="Email" style="-fx-background-radius: 12; -fx-background-color: #c8e6c9; -fx-border-color: transparent;" />
-            <PasswordField fx:id="passwordField" promptText="Password" style="-fx-background-radius: 12; -fx-background-color: #c8e6c9; -fx-border-color: transparent;" onAction="#onLogin"/>
-            <Label fx:id="errorLabel" textFill="#d72525" />
+            <TextField fx:id="emailField" promptText="Email"
+                       style="-fx-background-radius: 12; -fx-background-color: #c8e6c9; -fx-border-color: transparent;"/>
+            <PasswordField fx:id="passwordField" promptText="Password"
+                           style="-fx-background-radius: 12; -fx-background-color: #c8e6c9; -fx-border-color: transparent;"
+                           onAction="#onLogin"/>
+            <Label fx:id="errorLabel" textFill="#d72525"/>
 
-            <Button fx:id="loginButton" style="-fx-background-color: #43a047; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 12;" text="Accedi" onMouseClicked="#onLogin"/>
+            <Button fx:id="loginButton"
+                    style="-fx-background-color: #43a047; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 12;"
+                    text="Accedi" onMouseClicked="#onLogin"/>
         </VBox>
 
         <!-- Registrati -->
         <HBox alignment="CENTER">
-            <Label style="-fx-text-fill: #388e3c;" text="Non hai un account?" />
-            <Hyperlink fx:id="registerLink" style="-fx-text-fill: #1b5e20; -fx-font-weight: bold;" text="Registrati" onMouseClicked="#onRegisterLink" />
+            <Label style="-fx-text-fill: #388e3c;" text="Non hai un account?"/>
+            <Hyperlink fx:id="registerLink" style="-fx-text-fill: #1b5e20; -fx-font-weight: bold;" text="Registrati"
+                       onMouseClicked="#onRegisterLink"/>
         </HBox>
     </VBox>
 </AnchorPane>

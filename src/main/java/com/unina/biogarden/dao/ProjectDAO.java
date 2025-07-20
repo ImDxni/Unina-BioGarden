@@ -15,7 +15,7 @@ public class ProjectDAO {
     private final DataSource dataSource = ConnectionManager.getDataSource();
 
     public ProjectDTO creaProgetto(String nome, LocalDate dataInizio, LocalDate dataFine, int idLotto) {
-        try(Connection conn = dataSource.getConnection()){
+        try (Connection conn = dataSource.getConnection()) {
             CallableStatement stmnt = conn.prepareCall("{ ? = call CreaProgetto(?, ?, ?, ?) }");
             stmnt.registerOutParameter(1, java.sql.Types.INTEGER);
             stmnt.setString(2, nome);
@@ -25,8 +25,8 @@ public class ProjectDAO {
             stmnt.executeUpdate();
             int idProgetto = stmnt.getInt(1);
             return new ProjectDTO(idProgetto, nome, dataInizio, dataFine, idLotto);
-        }catch(SQLException ex){
-            if(ex.getSQLState().equalsIgnoreCase("P0002")){
+        } catch (SQLException ex) {
+            if (ex.getSQLState().equalsIgnoreCase("P0002")) {
                 throw new IllegalStateException("La data di inizio è successiva alla data di fine");
             } else {
                 throw new RuntimeException("Errore durante la creazione del progetto", ex);
@@ -36,27 +36,26 @@ public class ProjectDAO {
 
     public Collection<ProjectDTO> fetchProjectsByLot(int idLotto) {
         Set<ProjectDTO> progetti = new HashSet<>();
-        try(Connection conn = dataSource.getConnection()){
+        try (Connection conn = dataSource.getConnection()) {
             PreparedStatement stmnt = conn.prepareStatement("SELECT * FROM progetto WHERE idlotto = ?");
 
-            stmnt.setInt(1,idLotto);
+            stmnt.setInt(1, idLotto);
 
             populateCollection(stmnt, progetti);
-        }catch(SQLException ex){
+        } catch (SQLException ex) {
             throw new RuntimeException("Errore durante il recupero dei progetti per il lotto con ID " + idLotto, ex);
         }
         return progetti;
     }
 
 
-
-    public Collection<ProjectDTO> fetchAllProjects(){
+    public Collection<ProjectDTO> fetchAllProjects() {
         Set<ProjectDTO> progetti = new HashSet<>();
-        try(Connection conn = dataSource.getConnection()){
+        try (Connection conn = dataSource.getConnection()) {
             PreparedStatement stmnt = conn.prepareStatement("SELECT * FROM progetto");
 
             populateCollection(stmnt, progetti);
-        }catch(SQLException ex){
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
         return progetti;
@@ -66,7 +65,7 @@ public class ProjectDAO {
     private static void populateCollection(PreparedStatement stmnt, Set<ProjectDTO> progetti) throws SQLException {
         ResultSet rs = stmnt.executeQuery();
 
-        while(rs.next()){
+        while (rs.next()) {
             progetti.add(new ProjectDTO(
                     rs.getInt("id"),
                     rs.getString("nome"),

@@ -20,20 +20,60 @@ public class HarvestReportEntry {
     }
 
     // Getters (necessari per TableView)
-    public String getLotName() { return lotName; }
-    public String getCultivationName() { return cultivationName; }
-    public int getTotalHarvests() { return totalHarvests; }
-    public double getAvgQuantity() { return avgQuantity; }
-    public double getMinQuantity() { return minQuantity; }
-    public double getMaxQuantity() { return maxQuantity; }
-    public String getUnit() { return unit; }
+    public String getLotName() {
+        return lotName;
+    }
+
+    public String getCultivationName() {
+        return cultivationName;
+    }
+
+    public int getTotalHarvests() {
+        return totalHarvests;
+    }
+
+    public double getAvgQuantity() {
+        return avgQuantity;
+    }
+
+    public double getMinQuantity() {
+        return minQuantity;
+    }
+
+    public double getMaxQuantity() {
+        return maxQuantity;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
 
     // Setters (se necessari, ma non per questo specifico report)
-    public void setLotName(String lotName) { this.lotName = lotName; }
-    public void setCultivationName(String cultivationName) { this.cultivationName = cultivationName; }
-    public void setTotalHarvests(int totalHarvests) { this.totalHarvests = totalHarvests; }
-    public void setAvgQuantity(double avgQuantity) { this.avgQuantity = avgQuantity; }
-    public void setMinQuantity(double minQuantity) { this.minQuantity = minQuantity; }
-    public void setMaxQuantity(double maxQuantity) { this.maxQuantity = maxQuantity; }
-    public void setUnit(String unit) { this.unit = unit; }
+    public void setLotName(String lotName) {
+        this.lotName = lotName;
+    }
+
+    public void setCultivationName(String cultivationName) {
+        this.cultivationName = cultivationName;
+    }
+
+    public void setTotalHarvests(int totalHarvests) {
+        this.totalHarvests = totalHarvests;
+    }
+
+    public void setAvgQuantity(double avgQuantity) {
+        this.avgQuantity = avgQuantity;
+    }
+
+    public void setMinQuantity(double minQuantity) {
+        this.minQuantity = minQuantity;
+    }
+
+    public void setMaxQuantity(double maxQuantity) {
+        this.maxQuantity = maxQuantity;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
 }

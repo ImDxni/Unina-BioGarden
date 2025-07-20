@@ -70,7 +70,7 @@ public class ActivityDAO {
         }
     }
 
-    public void deleteActivity(int activityID){
+    public void deleteActivity(int activityID) {
         try (Connection conn = dataSource.getConnection()) {
             PreparedStatement stmnt = conn.prepareStatement("DELETE FROM Attivita WHERE id = ?");
             stmnt.setInt(1, activityID);
@@ -115,7 +115,8 @@ public class ActivityDAO {
                         String unit = rs.getString("UnitaMisuraRaccolta");
                         activity = new HarvestingActivityDTO(id, date, activityStatus, expectedQuantity, actualQuantity, unit, coltureID, lotID, farmerID);
                     }
-                    case IRRIGATION -> activity = new IrrigationActivityDTO(id, date, activityStatus, coltureIDFromDB, lotID, farmerID);
+                    case IRRIGATION ->
+                            activity = new IrrigationActivityDTO(id, date, activityStatus, coltureIDFromDB, lotID, farmerID);
 
                     default -> throw new IllegalArgumentException("Unsupported activity type: " + activityType);
                 }

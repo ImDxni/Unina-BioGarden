@@ -3,7 +3,7 @@
     -fx-border-radius: 10px;
 }
 
-.button:hover{
+.button:hover {
     -fx-cursor: hand;
 }
 
@@ -79,13 +79,14 @@ TABELLE
 }
 
 .jfx-tree-table-view .column-header {
-    -fx-padding: 3 0 3 0;   /* top, right, bottom, left */
+    -fx-padding: 3 0 3 0; /* top, right, bottom, left */
     -fx-min-height: 24px;
     -fx-pref-height: 24px;
-    -fx-max-height: 20px;   /* Puoi abbassare a piacere */
+    -fx-max-height: 20px; /* Puoi abbassare a piacere */
     -fx-border-radius: 14 14 0 0;
     -fx-background-radius: 14 14 0 0;
 }
+
 .jfx-tree-table-view .column-header-background {
     -fx-border-width: 0;
     -fx-border-color: transparent;
@@ -94,7 +95,7 @@ TABELLE
 
 /* Riduci font */
 .jfx-tree-table-view .column-header .label {
-    -fx-font-size: 13px;  /* o 12px */
+    -fx-font-size: 13px; /* o 12px */
     -fx-font-weight: 600;
     -fx-text-fill: #444;
     -fx-padding: 0 4 0 4;
@@ -119,16 +120,16 @@ TABELLE
     -fx-border-color: #e0e0e0;
     -fx-border-radius: 10;
     -fx-background-radius: 10;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 6, 0, 0, 2);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.05), 6, 0, 0, 2);
     -fx-cursor: hand;
 }
 
 /* Stile per il lotto selezionato */
 .lot-pane.selected {
     -fx-background-color: #e8f5e9; /* Un verde molto chiaro */
-    -fx-border-color: #43a047;   /* Il verde principale */
-    -fx-border-width: 2;         /* Bordo più spesso */
+    -fx-border-color: #43a047; /* Il verde principale */
+    -fx-border-width: 2; /* Bordo più spesso */
     -fx-border-radius: 10;
     -fx-background-radius: 10;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 3); /* Ombra più pronunciata */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 8, 0, 0, 3); /* Ombra più pronunciata */
 }

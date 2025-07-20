@@ -13,7 +13,8 @@ public class Session {
     /**
      * Private constructor to prevent direct instantiation, enforcing the singleton pattern.
      */
-    private Session() {}
+    private Session() {
+    }
 
     /**
      * Sets the current user for the session, effectively logging them in.

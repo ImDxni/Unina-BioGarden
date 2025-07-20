@@ -5,32 +5,48 @@ import com.unina.biogarden.enumerations.ActivityType;
 
 import java.time.LocalDate;
 
-public class HarvestingActivity extends Activity{
+public class HarvestingActivity extends Activity {
     private int plannedQuantity;
     private int actualQuantity;
     private String unit;
 
-    public HarvestingActivity(int id, LocalDate date,int farmerID,String farmer, int plannedQuantity, int actualQuantity, String unit) {
+    public HarvestingActivity(int id, LocalDate date, int farmerID, String farmer, int plannedQuantity, int actualQuantity, String unit) {
         super(id, date, ActivityType.HARVEST, ActivityStatus.PLANNED, farmerID, farmer);
         this.plannedQuantity = plannedQuantity;
         this.actualQuantity = actualQuantity;
         this.unit = unit;
     }
 
-    public HarvestingActivity(int id, LocalDate date, ActivityStatus status,int farmerID, String farmer, int plannedQuantity, int actualQuantity, String unit) {
+    public HarvestingActivity(int id, LocalDate date, ActivityStatus status, int farmerID, String farmer, int plannedQuantity, int actualQuantity, String unit) {
         super(id, date, ActivityType.HARVEST, status, farmerID, farmer);
         this.plannedQuantity = plannedQuantity;
         this.actualQuantity = actualQuantity;
         this.unit = unit;
     }
 
-    public int getPlannedQuantity() { return plannedQuantity; }
-    public int getActualQuantity() { return actualQuantity; }
-    public String getUnit() { return unit; }
+    public int getPlannedQuantity() {
+        return plannedQuantity;
+    }
 
-    public void setPlannedQuantity(int plannedQuantity) { this.plannedQuantity = plannedQuantity; }
-    public void setActualQuantity(int actualQuantity) { this.actualQuantity = actualQuantity; }
-    public void setUnit(String unit) { this.unit = unit; }
+    public int getActualQuantity() {
+        return actualQuantity;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setPlannedQuantity(int plannedQuantity) {
+        this.plannedQuantity = plannedQuantity;
+    }
+
+    public void setActualQuantity(int actualQuantity) {
+        this.actualQuantity = actualQuantity;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
 
 
     @Override

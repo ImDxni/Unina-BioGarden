@@ -1,13 +1,13 @@
 package com.unina.biogarden.enumerations;
 
 public enum ActivityStatus {
-    PLANNED("pianificata","Pianificata"),
+    PLANNED("pianificata", "Pianificata"),
     IN_PROGRESS("in_corso", "In Corso"),
     COMPLETED("terminata", "Completata");
 
-    private final String status,label;
+    private final String status, label;
 
-    ActivityStatus(String status,String label) {
+    ActivityStatus(String status, String label) {
         this.status = status;
         this.label = label;
     }

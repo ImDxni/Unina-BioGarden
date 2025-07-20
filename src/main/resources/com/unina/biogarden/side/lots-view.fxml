@@ -1,17 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXTreeTableView?>
-<?import com.jfoenix.controls.JFXTreeTableColumn?>
+<?import com.jfoenix.controls.*?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.Priority?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.FlowPane?>
-
+<?import javafx.scene.layout.*?>
 <VBox spacing="32.0"
       fx:controller="com.unina.biogarden.controller.side.LotsController"
       xmlns="http://javafx.com/javafx/24.0.1"
@@ -42,10 +34,10 @@
             <JFXTreeTableView fx:id="projectsPerLotTable" VBox.vgrow="ALWAYS"
                               style="-fx-background-color: #fff; -fx-background-radius: 12; -fx-border-color: #e0e0e0; -fx-border-radius: 12;">
                 <columns>
-                    <JFXTreeTableColumn fx:id="nameCol" text="Nome" />
-                    <JFXTreeTableColumn fx:id="lotCol" text="Lotto" />
-                    <JFXTreeTableColumn fx:id="seasonCol" text="Stagione" />
-                    <JFXTreeTableColumn fx:id="statusCol" text="Stato" />
+                    <JFXTreeTableColumn fx:id="nameCol" text="Nome"/>
+                    <JFXTreeTableColumn fx:id="lotCol" text="Lotto"/>
+                    <JFXTreeTableColumn fx:id="seasonCol" text="Stagione"/>
+                    <JFXTreeTableColumn fx:id="statusCol" text="Stato"/>
                 </columns>
             </JFXTreeTableView>
         </VBox>

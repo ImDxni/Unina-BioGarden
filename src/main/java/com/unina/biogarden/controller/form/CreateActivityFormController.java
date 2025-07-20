@@ -1,6 +1,9 @@
 package com.unina.biogarden.controller.form;
 
-import com.unina.biogarden.models.*;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTextField;
+import com.unina.biogarden.models.Colture;
+import com.unina.biogarden.models.Farmer;
 import com.unina.biogarden.models.activity.Activity;
 import com.unina.biogarden.models.activity.HarvestingActivity;
 import com.unina.biogarden.models.activity.IrrigationActivity;
@@ -8,8 +11,6 @@ import com.unina.biogarden.models.activity.SeedingActivity;
 import com.unina.biogarden.service.ProjectService;
 import com.unina.biogarden.service.UserService;
 import com.unina.biogarden.utils.Utils;
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXTextField;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,6 +18,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+
 import java.time.LocalDate;
 import java.util.Arrays;
 
@@ -178,10 +180,10 @@ public class CreateActivityFormController extends AbstractForm {
                     }
                     int sowingQuantity = Integer.parseInt(sowingQuantityField.getText());
                     String sowingUnit = sowingUnitField.getText();
-                    newActivity = new SeedingActivity(0, date, selectedGrower.getId(),selectedGrower.getFullName(),sowingQuantity, sowingUnit); // Passa selectedGrower
+                    newActivity = new SeedingActivity(0, date, selectedGrower.getId(), selectedGrower.getFullName(), sowingQuantity, sowingUnit); // Passa selectedGrower
                     break;
                 case "Irrigazione":
-                    newActivity = new IrrigationActivity(0, date,selectedGrower.getId(), selectedGrower.getFullName()); // Passa selectedGrower
+                    newActivity = new IrrigationActivity(0, date, selectedGrower.getId(), selectedGrower.getFullName()); // Passa selectedGrower
                     break;
                 case "Raccolta":
                     if (harvestPlannedQuantityField.getText().isEmpty() || harvestActualQuantityField.getText().isEmpty() || harvestUnitField.getText().isEmpty()) {
@@ -191,7 +193,7 @@ public class CreateActivityFormController extends AbstractForm {
                     int planned = Integer.parseInt(harvestPlannedQuantityField.getText());
                     int actual = Integer.parseInt(harvestActualQuantityField.getText());
                     String harvestUnit = harvestUnitField.getText();
-                    newActivity = new HarvestingActivity(0, date, selectedGrower.getId(),selectedGrower.getFullName(),planned, actual, harvestUnit); // Passa selectedGrower
+                    newActivity = new HarvestingActivity(0, date, selectedGrower.getId(), selectedGrower.getFullName(), planned, actual, harvestUnit); // Passa selectedGrower
                     break;
             }
 

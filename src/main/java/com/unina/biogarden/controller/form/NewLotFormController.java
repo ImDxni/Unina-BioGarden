@@ -8,7 +8,7 @@ import javafx.scene.control.Alert;
 
 import static com.unina.biogarden.utils.Utils.showAlert;
 
-public class NewLotFormController extends AbstractForm{
+public class NewLotFormController extends AbstractForm {
 
     @FXML
     private JFXTextField nameField;
@@ -31,14 +31,14 @@ public class NewLotFormController extends AbstractForm{
         String areaText = areaField.getText();
 
         if (nome.isEmpty() || areaText.isEmpty()) {
-            showAlert(Alert.AlertType.ERROR,"Errore", "Per favore, compila tutti i campi.");
+            showAlert(Alert.AlertType.ERROR, "Errore", "Per favore, compila tutti i campi.");
             return;
         }
 
         try {
             int area = Integer.parseInt(areaText);
             if (area <= 0) {
-                showAlert(Alert.AlertType.ERROR,"Errore", "L'area deve essere un numero positivo.");
+                showAlert(Alert.AlertType.ERROR, "Errore", "L'area deve essere un numero positivo.");
                 return;
             }
 
@@ -61,7 +61,7 @@ public class NewLotFormController extends AbstractForm{
 
 
         } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR,"Errore", "L'area deve essere un numero valido.");
+            showAlert(Alert.AlertType.ERROR, "Errore", "L'area deve essere un numero valido.");
         }
     }
 

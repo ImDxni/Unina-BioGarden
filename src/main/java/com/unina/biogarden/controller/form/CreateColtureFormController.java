@@ -1,16 +1,15 @@
 package com.unina.biogarden.controller.form;
 
+import com.jfoenix.controls.JFXComboBox;
 import com.unina.biogarden.exceptions.ColtureAlreadyExists;
 import com.unina.biogarden.models.Crop;
-import com.unina.biogarden.models.Farmer;
 import com.unina.biogarden.models.Project;
 import com.unina.biogarden.service.ProjectService;
-import com.unina.biogarden.service.UserService;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import com.jfoenix.controls.JFXComboBox;
+
 import static com.unina.biogarden.utils.Utils.showAlert;
 
 public class CreateColtureFormController extends AbstractForm {

@@ -1,6 +1,8 @@
 package com.unina.biogarden.controller.side;
 
-import com.jfoenix.controls.*;
+import com.jfoenix.controls.JFXTreeTableColumn;
+import com.jfoenix.controls.JFXTreeTableView;
+import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.unina.biogarden.controller.form.NewLotFormController;
 import com.unina.biogarden.models.Lot;

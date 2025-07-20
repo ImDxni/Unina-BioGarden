@@ -21,7 +21,6 @@ import com.unina.biogarden.models.activity.SeedingActivity;
 import com.unina.biogarden.models.report.HarvestReportEntry;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ProjectService extends AbstractService<ProjectDTO> {
     private final ProjectDAO projectDao = new ProjectDAO();
@@ -56,7 +55,7 @@ public class ProjectService extends AbstractService<ProjectDTO> {
         }
 
         ActivityDTO dto;
-        switch(activity.getType()){
+        switch (activity.getType()) {
             case SEEDING -> {
                 SeedingActivity seedingActivity = (SeedingActivity) activity;
                 dto = new SeedingActivityDTO(
@@ -119,38 +118,39 @@ public class ProjectService extends AbstractService<ProjectDTO> {
     public Collection<Activity> fetchActivities(int coltureId) {
         return activityDAO.fetchActivityByColture(coltureId).stream()
                 .map(activity -> switch (activity.getType()) {
-                            case SEEDING -> new SeedingActivity(
-                                    activity.getId(),
-                                    activity.getDate(),
-                                    activity.getStatus(),
-                                    activity.getFarmerID(),
-                                    getFarmerById(activity.getFarmerID()).getFullName(),
-                                    ((SeedingActivityDTO)activity).getQuantity(),
-                                    ((SeedingActivityDTO)activity).getUnit()
-                            );
-                            case HARVEST -> new HarvestingActivity(
-                                    activity.getId(),
-                                    activity.getDate(),
-                                    activity.getStatus(),
-                                    activity.getFarmerID(),
-                                    getFarmerById(activity.getFarmerID()).getFullName(),
-                                    ((HarvestingActivityDTO)activity).getExpectedQuantity(),
-                                    ((HarvestingActivityDTO)activity).getActualQuantity(),
-                                    ((HarvestingActivityDTO)activity).getUnit()
-                            );
-                            case IRRIGATION -> new IrrigationActivity(
-                                    activity.getId(),
-                                    activity.getDate(),
-                                    activity.getStatus(),
-                                    activity.getFarmerID(),
-                                    getFarmerById(activity.getFarmerID()).getFullName()
-                            );
-                        }).toList();
+                    case SEEDING -> new SeedingActivity(
+                            activity.getId(),
+                            activity.getDate(),
+                            activity.getStatus(),
+                            activity.getFarmerID(),
+                            getFarmerById(activity.getFarmerID()).getFullName(),
+                            ((SeedingActivityDTO) activity).getQuantity(),
+                            ((SeedingActivityDTO) activity).getUnit()
+                    );
+                    case HARVEST -> new HarvestingActivity(
+                            activity.getId(),
+                            activity.getDate(),
+                            activity.getStatus(),
+                            activity.getFarmerID(),
+                            getFarmerById(activity.getFarmerID()).getFullName(),
+                            ((HarvestingActivityDTO) activity).getExpectedQuantity(),
+                            ((HarvestingActivityDTO) activity).getActualQuantity(),
+                            ((HarvestingActivityDTO) activity).getUnit()
+                    );
+                    case IRRIGATION -> new IrrigationActivity(
+                            activity.getId(),
+                            activity.getDate(),
+                            activity.getStatus(),
+                            activity.getFarmerID(),
+                            getFarmerById(activity.getFarmerID()).getFullName()
+                    );
+                }).toList();
     }
 
-    public void deleteActivity(Activity activity){
+    public void deleteActivity(Activity activity) {
         activityDAO.deleteActivity(activity.getId());
     }
+
     public Collection<Colture> getColtures(int projectId) {
         return coltureDao.fetchColtures(projectId).stream()
                 .map(colture -> new Colture(

@@ -41,14 +41,14 @@ public class LoginController {
         String email = emailField.getText();
         String password = passwordField.getText();
 
-        if(email.isEmpty() || password.isEmpty()){
+        if (email.isEmpty() || password.isEmpty()) {
             errorLabel.setVisible(true);
             errorLabel.setText("Email e password non possono essere vuoti.");
             return;
         }
 
         try {
-           service.login(email, password);
+            service.login(email, password);
         } catch (Exception e) {
             errorLabel.setText("Login fallito: " + e.getMessage());
             errorLabel.setVisible(true);

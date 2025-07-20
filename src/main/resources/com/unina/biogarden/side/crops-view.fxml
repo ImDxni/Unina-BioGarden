@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXTreeTableView?>
-<?import com.jfoenix.controls.JFXTreeTableColumn?>
+<?import com.jfoenix.controls.*?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.Pane?>
-
+<?import javafx.scene.layout.VBox?>
 <VBox spacing="24.0"
       fx:controller="com.unina.biogarden.controller.side.CropsController"
       xmlns="http://javafx.com/javafx/24.0.1"
@@ -22,12 +19,13 @@
                    style="-fx-background-color: #43a047; -fx-text-fill: #fff; -fx-font-weight: 600; -fx-background-radius: 8; -fx-pref-width: 120px; -fx-pref-height: 36px;"/>
     </HBox>
 
-    <JFXTreeTableView fx:id="cropsTable" prefHeight="480" style="-fx-background-radius: 14; -fx-border-radius: 14; -fx-table-cell-border-color: #ededed;">
+    <JFXTreeTableView fx:id="cropsTable" prefHeight="480"
+                      style="-fx-background-radius: 14; -fx-border-radius: 14; -fx-table-cell-border-color: #ededed;">
         <columns>
-            <JFXTreeTableColumn fx:id="nameCol" text="Nome" />
-            <JFXTreeTableColumn fx:id="growthTimeCol" text="Tempo Maturazione" />
-            <JFXTreeTableColumn fx:id="seededCol" text="Seminati" />
-            <JFXTreeTableColumn fx:id="harvestedCol" text="Raccolti" />
+            <JFXTreeTableColumn fx:id="nameCol" text="Nome"/>
+            <JFXTreeTableColumn fx:id="growthTimeCol" text="Tempo Maturazione"/>
+            <JFXTreeTableColumn fx:id="seededCol" text="Seminati"/>
+            <JFXTreeTableColumn fx:id="harvestedCol" text="Raccolti"/>
         </columns>
     </JFXTreeTableView>
 </VBox>

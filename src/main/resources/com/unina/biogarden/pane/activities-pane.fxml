@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.geometry.Insets?>
-<?import com.jfoenix.controls.JFXButton?>
 
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <VBox spacing="20" alignment="TOP_CENTER"
       xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.unina.biogarden.controller.side.CultivationActivitiesController"
@@ -15,7 +11,7 @@
     <HBox alignment="CENTER_LEFT" spacing="16">
         <Label fx:id="cultivationNameLabel" text="Attività per [Nome Coltivazione]"
                style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-font-family: 'Inter', Arial, sans-serif; -fx-text-fill: #333;"/>
-        <HBox HBox.hgrow="ALWAYS" />
+        <HBox HBox.hgrow="ALWAYS"/>
         <JFXButton text="Aggiungi Attività" onAction="#handleAddActivity"
                    style="-fx-background-color: #43a047; -fx-text-fill: #fff; -fx-font-weight: 600; -fx-background-radius: 8; -fx-pref-width: 180px; -fx-pref-height: 35px; -fx-font-size: 14px;"/>
     </HBox>
@@ -26,9 +22,12 @@
             <TableColumn fx:id="colDate" text="Data" prefWidth="120"/>
             <TableColumn fx:id="colStatus" text="Status" prefWidth="120"/>
             <TableColumn fx:id="colType" text="Tipo Attività" prefWidth="150"/>
-            <TableColumn fx:id="colGrower" text="Coltivatore" prefWidth="150"/> <TableColumn fx:id="colDetails" text="Dettagli" prefWidth="300"/>
+            <TableColumn fx:id="colGrower" text="Coltivatore" prefWidth="150"/>
+            <TableColumn fx:id="colDetails" text="Dettagli" prefWidth="300"/>
             <TableColumn fx:id="colActions" text="Azioni" prefWidth="150"/>
         </columns>
-        <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+        </columnResizePolicy>
     </TableView>
 </VBox>

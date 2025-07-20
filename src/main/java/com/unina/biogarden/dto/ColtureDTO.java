@@ -10,5 +10,5 @@ public record ColtureDTO(
         ColtureStatus status,
         int projectId,
         int cropId,
-        String cropName){
+        String cropName) {
 }

@@ -29,7 +29,7 @@ public class Colture {
         this.crop = crop;
     }
 
-    public Colture(int id, Crop crop){
+    public Colture(int id, Crop crop) {
         this.id = id;
         this.startDate = LocalDate.now();
         this.status = ColtureStatus.WAITING;
@@ -67,7 +67,7 @@ public class Colture {
 
             nameLabel.setText(crop.nameProperty().get());
             String formattedDate = this.startDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
-            dateStatusLabel.setText(formattedDate + " (" + firstCapitalLetter(status.getStatus())+ ")");
+            dateStatusLabel.setText(formattedDate + " (" + firstCapitalLetter(status.getStatus()) + ")");
             box.setOnMouseClicked(onClickHandler);
 
             return box;

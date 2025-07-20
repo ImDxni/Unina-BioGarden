@@ -10,7 +10,7 @@ import com.unina.biogarden.session.Session;
 
 import java.util.Collection;
 
-public class UserService extends AbstractService<UserDTO>{
+public class UserService extends AbstractService<UserDTO> {
 
     private final UserDAO dao = new UserDAO();
 
@@ -20,7 +20,7 @@ public class UserService extends AbstractService<UserDTO>{
         this.users = dao.fetchAllUsers();
     }
 
-    public Collection<Farmer> fetchAllFarmer(){
+    public Collection<Farmer> fetchAllFarmer() {
         return fetchAll().stream().filter(user -> user.tipo() == UserType.FARMER)
                 .map(user -> new Farmer(
                         user.id(),

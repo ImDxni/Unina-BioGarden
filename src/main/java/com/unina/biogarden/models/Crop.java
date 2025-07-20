@@ -11,7 +11,7 @@ public class Crop extends RecursiveTreeObject<Crop> {
     private final StringProperty seeded;
     private final StringProperty harvested;
 
-    public Crop(int id,String name, int growthTime) {
+    public Crop(int id, String name, int growthTime) {
         this.id = id;
         this.name = new SimpleStringProperty(name);
         this.growthTime = new SimpleStringProperty(growthTime + " Giorni");

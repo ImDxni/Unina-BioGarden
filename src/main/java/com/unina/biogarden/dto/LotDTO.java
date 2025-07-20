@@ -5,8 +5,8 @@ package com.unina.biogarden.dto;
  * Used to transfer data related to a lot between different application layers.
  */
 public record LotDTO(
-    int id,          // Unique identifier for the lot
-    String nome,    // Name of the lot
-    int area        // Area of the lot in square meters
+        int id,          // Unique identifier for the lot
+        String nome,    // Name of the lot
+        int area        // Area of the lot in square meters
 ) {
 }

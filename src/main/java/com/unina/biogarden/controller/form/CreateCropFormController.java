@@ -8,7 +8,7 @@ import javafx.scene.control.Alert;
 
 import static com.unina.biogarden.utils.Utils.showAlert;
 
-public class CreateCropFormController extends AbstractForm{
+public class CreateCropFormController extends AbstractForm {
 
     @FXML
     private JFXTextField cropNameField;

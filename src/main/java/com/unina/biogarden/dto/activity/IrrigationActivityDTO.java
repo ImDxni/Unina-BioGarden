@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 public class IrrigationActivityDTO extends ActivityDTO {
 
-    public IrrigationActivityDTO(int id, LocalDate date, ActivityStatus status,ActivityType type, int coltureID, int lotID, int farmerID) {
+    public IrrigationActivityDTO(int id, LocalDate date, ActivityStatus status, ActivityType type, int coltureID, int lotID, int farmerID) {
         super(id, date, status, type, coltureID, lotID, farmerID);
     }
 

@@ -32,7 +32,7 @@ public class Project extends RecursiveTreeObject<Project> {
 
     private final Collection<Colture> coltures = new ArrayList<>();
 
-    public Project(int id,String name, int lotId,String lotName, LocalDate startDate, LocalDate endDate) {
+    public Project(int id, String name, int lotId, String lotName, LocalDate startDate, LocalDate endDate) {
         this.id = id;
         this.lotId = lotId;
         this.name = new SimpleStringProperty(name);
@@ -42,8 +42,8 @@ public class Project extends RecursiveTreeObject<Project> {
         this.status = new SimpleStringProperty(getStatus(startDate, endDate));
     }
 
-    public Project(int id,String name, int lotId,String lotName, LocalDate startDate, LocalDate endDate, Collection<Colture> coltures) {
-        this(id,name,lotId,lotName,startDate,endDate);
+    public Project(int id, String name, int lotId, String lotName, LocalDate startDate, LocalDate endDate, Collection<Colture> coltures) {
+        this(id, name, lotId, lotName, startDate, endDate);
 
         this.coltures.addAll(coltures);
     }
@@ -142,7 +142,6 @@ public class Project extends RecursiveTreeObject<Project> {
         seasonCol.setCellValueFactory(getSafeCellValueFactory(Project::seasonProperty));
         statusCol.setCellValueFactory(getSafeCellValueFactory(Project::statusProperty));
     }
-
 
 
 }

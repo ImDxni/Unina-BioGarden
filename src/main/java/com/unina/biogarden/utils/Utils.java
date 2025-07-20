@@ -30,7 +30,7 @@ public class Utils {
      * @param password The plain-text password to encrypt.
      * @return A Base64 encoded string containing the salt and the hashed password, separated by a colon (e.g., "saltBase64:hashBase64").
      */
-    public static String encryptPassword(String password){
+    public static String encryptPassword(String password) {
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[16];
         random.nextBytes(salt);
@@ -117,7 +117,7 @@ public class Utils {
         alert.showAndWait();
     }
 
-    public static String firstCapitalLetter(String s){
+    public static String firstCapitalLetter(String s) {
         if (s == null || s.isEmpty()) {
             return s;
         }

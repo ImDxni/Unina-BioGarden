@@ -11,11 +11,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
+
 import java.time.LocalDate;
 
 import static com.unina.biogarden.utils.Utils.showAlert;
 
-public class CreateProjectFormController extends AbstractForm{
+public class CreateProjectFormController extends AbstractForm {
 
     @FXML
     private JFXTextField projectNameField;
@@ -70,11 +71,11 @@ public class CreateProjectFormController extends AbstractForm{
 
         try {
             service.insert(new ProjectDTO(
-                0,
-                nome,
-                dataInizio,
-                dataFine,
-                selectedLot.getId()
+                    0,
+                    nome,
+                    dataInizio,
+                    dataFine,
+                    selectedLot.getId()
             ));
 
             if (createRunnable != null) {

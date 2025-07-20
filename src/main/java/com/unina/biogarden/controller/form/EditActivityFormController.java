@@ -1,14 +1,16 @@
 package com.unina.biogarden.controller.form;
 
-import com.unina.biogarden.enumerations.ActivityType; // Usiamo ActivityType enum
-import com.unina.biogarden.enumerations.ActivityStatus; // NUOVO IMPORT
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTextField;
+import com.unina.biogarden.enumerations.ActivityStatus;
+import com.unina.biogarden.enumerations.ActivityType;
 import com.unina.biogarden.models.Farmer;
-import com.unina.biogarden.models.activity.*;
+import com.unina.biogarden.models.activity.Activity;
+import com.unina.biogarden.models.activity.HarvestingActivity;
+import com.unina.biogarden.models.activity.SeedingActivity;
 import com.unina.biogarden.service.ProjectService;
 import com.unina.biogarden.service.UserService;
 import com.unina.biogarden.utils.Utils;
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXTextField;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,8 +18,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+
 import java.time.LocalDate;
-import java.util.Arrays; // Necessario per ActivityStatus.values()
+import java.util.Arrays;
 
 import static com.unina.biogarden.utils.Utils.firstCapitalLetter;
 

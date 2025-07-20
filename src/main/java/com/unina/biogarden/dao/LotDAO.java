@@ -15,9 +15,9 @@ public class LotDAO {
     private final DataSource dataSource = ConnectionManager.getDataSource();
 
 
-    public LotDTO createPlot(String name, int area){
+    public LotDTO createPlot(String name, int area) {
         int ownerID = Session.getUtente().id();
-        try(Connection conn = dataSource.getConnection()){
+        try (Connection conn = dataSource.getConnection()) {
             CallableStatement stmnt = conn.prepareCall("{ ? = call CreaLotto(?, ?,?) }");
             stmnt.registerOutParameter(1, java.sql.Types.INTEGER);
 
@@ -29,29 +29,29 @@ public class LotDAO {
 
             int plotID = stmnt.getInt(1);
             return new LotDTO(plotID, name, area);
-        }catch(SQLException ex){
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
 
         return null;
     }
 
-    public Collection<LotDTO> getAllLots(){
+    public Collection<LotDTO> getAllLots() {
         Set<LotDTO> lots = new HashSet<>();
-        try(Connection conn = dataSource.getConnection()){
+        try (Connection conn = dataSource.getConnection()) {
             PreparedStatement stmnt = conn.prepareStatement("SELECT * FROM lotto WHERE idutente = ?");
 
             stmnt.setInt(1, Session.getUtente().id());
             ResultSet rs = stmnt.executeQuery();
 
-            while(rs.next()){
+            while (rs.next()) {
                 lots.add(new LotDTO(
                         rs.getInt("id"),
                         rs.getString("nome"),
                         rs.getInt("area")
                 ));
             }
-        }catch(SQLException ex){
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
 
@@ -76,7 +76,6 @@ public class LotDAO {
         }
         return null;
     }
-
 
 
 }

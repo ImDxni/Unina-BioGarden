@@ -12,7 +12,7 @@ public class Lot {
     private final String name;
     private final int area;
 
-    public Lot(int id,String name, int area) {
+    public Lot(int id, String name, int area) {
         this.name = name;
         this.area = area;
         this.id = id;
@@ -25,6 +25,7 @@ public class Lot {
     public int getId() {
         return id;
     }
+
     public String getName() {
         return name;
     }

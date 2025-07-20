@@ -1,6 +1,6 @@
 package com.unina.biogarden.exceptions;
 
-public class ColtureAlreadyExists extends Exception{
+public class ColtureAlreadyExists extends Exception {
 
     /**
      * Constructs a new ColtureAlreadyExists exception with the specified detail message.

@@ -38,7 +38,7 @@ public class UserDAO {
     public void registerUser(String nome, String cognome, String email, String password, UserType tipo) throws UtenteEsistenteException {
         String hashedPassword = Utils.encryptPassword(password);
 
-        try(Connection conn = dataSource.getConnection()){
+        try (Connection conn = dataSource.getConnection()) {
             CallableStatement stmt = conn.prepareCall("{ ? = call RegistraUtente(?, ?, ?, ?, ?::TipoUtente) }");
 
             stmt.registerOutParameter(1, java.sql.Types.INTEGER); // output
@@ -54,7 +54,7 @@ public class UserDAO {
             stmt.setObject(6, tipoUtenteObj);
 
             stmt.executeUpdate();
-        }catch(SQLException ex) {
+        } catch (SQLException ex) {
             if (ex.getSQLState().equalsIgnoreCase("P0001")) {
                 throw new UtenteEsistenteException("Utente con email " + email + " già esistente");
             } else {
@@ -101,7 +101,7 @@ public class UserDAO {
         }
     }
 
-    public Collection<UserDTO> fetchAllUsers(){
+    public Collection<UserDTO> fetchAllUsers() {
         try (Connection conn = dataSource.getConnection()) {
             PreparedStatement stmnt = conn.prepareStatement("SELECT * FROM utente");
             var rs = stmnt.executeQuery();

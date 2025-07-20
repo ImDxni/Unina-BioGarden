@@ -26,6 +26,7 @@ public abstract class Activity {
     public int getFarmerID() {
         return farmerID;
     }
+
     public int getId() {
         return id;
     }
@@ -70,7 +71,6 @@ public abstract class Activity {
     public String getFarmer() {
         return farmer;
     }
-
 
 
     public abstract String getDetails();

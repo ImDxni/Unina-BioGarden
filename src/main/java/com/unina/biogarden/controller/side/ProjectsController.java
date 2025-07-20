@@ -1,17 +1,11 @@
 package com.unina.biogarden.controller.side;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXTreeTableColumn;
-import com.jfoenix.controls.JFXTreeTableView;
-import com.jfoenix.controls.RecursiveTreeItem;
-import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.unina.biogarden.controller.form.CreateColtureFormController;
 import com.unina.biogarden.controller.form.CreateProjectFormController;
 import com.unina.biogarden.models.Colture;
 import com.unina.biogarden.models.Project;
 import com.unina.biogarden.service.ProjectService;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,7 +13,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.TreeItem;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -48,7 +41,7 @@ public class ProjectsController {
 
             project.setColtures(service.getColtures(project.getId()));
 
-            Node projectBlock = project.buildProjectPane(this::handleAddCultivation,this::handleCultivationClick);
+            Node projectBlock = project.buildProjectPane(this::handleAddCultivation, this::handleCultivationClick);
             mainActivitiesContainer.getChildren().add(projectBlock);
         }
     }

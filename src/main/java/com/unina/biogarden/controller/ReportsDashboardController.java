@@ -7,11 +7,7 @@ import com.unina.biogarden.utils.Utils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.ScrollEvent;
@@ -20,7 +16,7 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.CategoryLabelPositions;
-import org.jfree.chart.fx.ChartViewer; // Importa ChartViewer per JavaFX
+import org.jfree.chart.fx.ChartViewer;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 import java.text.DecimalFormat;
@@ -94,7 +90,7 @@ public class ReportsDashboardController {
             Collection<Lot> lots = projectService.fetchAllLots();
             // Aggiungi un'opzione "Tutti i Lotti" all'inizio
             ObservableList<Lot> lotOptions = FXCollections.observableArrayList();
-            lotOptions.add(new Lot(0, "Tutti i Lotti",0)); // Lotto fittizio per l'opzione "Tutti"
+            lotOptions.add(new Lot(0, "Tutti i Lotti", 0)); // Lotto fittizio per l'opzione "Tutti"
             lotOptions.addAll(lots);
             lotComboBox.setItems(lotOptions);
             lotComboBox.getSelectionModel().selectFirst(); // Seleziona "Tutti i Lotti" di default

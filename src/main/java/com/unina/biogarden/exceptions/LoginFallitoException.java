@@ -5,7 +5,7 @@ package com.unina.biogarden.exceptions;
  * This is a checked exception, meaning it must be declared in a method's throws clause
  * or handled within a try-catch block.
  */
-public class LoginFallitoException extends Exception{
+public class LoginFallitoException extends Exception {
 
     /**
      * Constructs a new LoginFallitoException with the specified detail message.

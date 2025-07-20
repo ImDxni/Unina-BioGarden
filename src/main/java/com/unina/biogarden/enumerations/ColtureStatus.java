@@ -7,6 +7,7 @@ public enum ColtureStatus {
     HARVESTED("raccolto");
 
     private final String status;
+
     ColtureStatus(String status) {
         this.status = status;
     }

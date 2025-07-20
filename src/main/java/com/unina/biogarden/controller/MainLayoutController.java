@@ -27,7 +27,7 @@ public class MainLayoutController {
             switchActiveItem(item);
             String fxmlFile = item.getId() + "-view.fxml";
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/unina/biogarden/side/"+fxmlFile));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/unina/biogarden/side/" + fxmlFile));
                 Node newContent = loader.load();
                 mainContent.getChildren().clear();
                 mainContent.getChildren().add(newContent);
@@ -36,6 +36,7 @@ public class MainLayoutController {
             }
         }
     }
+
     private HBox getMenuItemFromEvent(MouseEvent event) {
         Node node = (Node) event.getTarget();
         while (node != null && !(node instanceof HBox)) {
@@ -45,8 +46,8 @@ public class MainLayoutController {
     }
 
 
-    private void switchActiveItem(HBox item){
-        if(activeItem != null && activeItem != item){
+    private void switchActiveItem(HBox item) {
+        if (activeItem != null && activeItem != item) {
             removeStyles(activeItem);
         }
 

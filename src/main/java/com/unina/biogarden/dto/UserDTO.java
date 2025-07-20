@@ -15,7 +15,7 @@ public record UserDTO(
         UserType tipo     // Type or role of the user (e.g., admin, regular user)
 ) {
 
-    public String getFullName(){
+    public String getFullName() {
         return nome + " " + cognome;
     }
 }

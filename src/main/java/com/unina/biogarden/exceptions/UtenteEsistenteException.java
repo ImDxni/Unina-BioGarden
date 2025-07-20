@@ -3,7 +3,7 @@ package com.unina.biogarden.exceptions;
 /**
  * Exception thrown when an attempt is made to create a user that already exists.
  */
-public class UtenteEsistenteException extends Exception{
+public class UtenteEsistenteException extends Exception {
     /**
      * Constructs a new UtenteEsistenteException with the specified detail message.
      *

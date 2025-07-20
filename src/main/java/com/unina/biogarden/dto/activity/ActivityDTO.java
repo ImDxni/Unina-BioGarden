@@ -11,9 +11,9 @@ public class ActivityDTO {
     private final LocalDate date;
     private final ActivityStatus status;
     private final ActivityType type;
-    private final int lotID,coltureID,farmerID;
+    private final int lotID, coltureID, farmerID;
 
-    public ActivityDTO(int id, LocalDate date, ActivityStatus status,ActivityType type,int coltureID,int lotID, int farmerID) {
+    public ActivityDTO(int id, LocalDate date, ActivityStatus status, ActivityType type, int coltureID, int lotID, int farmerID) {
         this.id = id;
         this.date = date;
         this.status = status;
@@ -38,12 +38,15 @@ public class ActivityDTO {
     public ActivityType getType() {
         return type;
     }
+
     public int getColtureID() {
         return coltureID;
     }
+
     public int getLotID() {
         return lotID;
     }
+
     public int getFarmerID() {
         return farmerID;
     }

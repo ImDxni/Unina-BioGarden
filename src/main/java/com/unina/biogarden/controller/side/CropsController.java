@@ -21,7 +21,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-import static com.unina.biogarden.utils.Utils.showAlert; // Se hai una classe Utils per showAlert
+import static com.unina.biogarden.utils.Utils.showAlert;
 
 public class CropsController {
 
