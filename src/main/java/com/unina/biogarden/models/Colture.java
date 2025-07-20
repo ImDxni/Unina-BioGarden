@@ -114,7 +114,7 @@ public class Colture {
 
             nameLabel.setText(crop.nameProperty().get());
             String formattedDate = this.startDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
-            dateStatusLabel.setText(formattedDate + " (" + firstCapitalLetter(status.getStatus()) + ")");
+            dateStatusLabel.setText(formattedDate);
             box.setOnMouseClicked(onClickHandler);
 
             return box;
