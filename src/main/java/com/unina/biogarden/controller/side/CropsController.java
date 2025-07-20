@@ -30,7 +30,6 @@ import static com.unina.biogarden.utils.Utils.showAlert;
  * @author Il Tuo Nome
  */
 public class CropsController {
-
     @FXML
     private JFXTreeTableView<Crop> cropsTable;
     @FXML
@@ -38,9 +37,7 @@ public class CropsController {
     @FXML
     private JFXTreeTableColumn<Crop, String> growthTimeCol;
     @FXML
-    private JFXTreeTableColumn<Crop, String> seededCol;
-    @FXML
-    private JFXTreeTableColumn<Crop, String> harvestedCol;
+    private JFXTreeTableColumn<Crop, String> projectsCol;
 
     private final ProjectService service = new ProjectService();
 
@@ -63,8 +60,7 @@ public class CropsController {
     private void initCellFactory() {
         nameCol.setCellValueFactory(param -> param.getValue().getValue().nameProperty());
         growthTimeCol.setCellValueFactory(param -> param.getValue().getValue().growthTimeProperty());
-        seededCol.setCellValueFactory(param -> new SimpleStringProperty("N/A"));
-        harvestedCol.setCellValueFactory(param -> new SimpleStringProperty("N/A"));
+        projectsCol.setCellValueFactory(param -> param.getValue().getValue().projectsProperty());
     }
 
     /**

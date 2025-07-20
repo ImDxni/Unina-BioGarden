@@ -18,6 +18,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 import java.time.LocalDate;
@@ -156,6 +157,7 @@ public class CreateActivityFormController extends AbstractForm {
             case "Irrigazione":
                 break;
         }
+        specificFieldsContainer.getScene().getWindow().sizeToScene();
     }
 
     /**

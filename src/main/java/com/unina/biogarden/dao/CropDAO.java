@@ -72,4 +72,20 @@ public class CropDAO {
         }
         return colture;
     }
+
+    public int countCropProjects(int cropId) {
+        int count = 0;
+        try (Connection conn = dataSource.getConnection()) {
+            PreparedStatement stmnt = conn.prepareStatement("SELECT COUNT(*) FROM Coltivazione WHERE idcoltura = ?");
+            stmnt.setInt(1, cropId);
+            ResultSet rs = stmnt.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (SQLException ex) {
+            System.err.println("Errore durante il conteggio dei progetti per la coltura: " + ex.getMessage());
+            ex.printStackTrace(); // Log dell'eccezione per il debug
+        }
+        return count;
+    }
 }

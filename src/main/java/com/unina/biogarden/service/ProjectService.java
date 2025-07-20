@@ -228,7 +228,7 @@ public class ProjectService extends AbstractService<ProjectDTO> {
                         colture.id(), colture.startDate(),
                         colture.status(),
                         // Si crea un Crop parziale qui, poiché CropDAO sarebbe necessario per i dettagli completi
-                        new Crop(0, colture.cropName(), 0)
+                        new Crop(0, colture.cropName(), 0, 0)
                 )).toList();
     }
 
@@ -239,7 +239,7 @@ public class ProjectService extends AbstractService<ProjectDTO> {
      */
     public Collection<Crop> getCrops() {
         return cropDao.fetchAllCrop().stream()
-                .map(crop -> new Crop(crop.id(), crop.nome(), crop.giorniMaturazione()))
+                .map(crop -> new Crop(crop.id(), crop.nome(), crop.giorniMaturazione(), cropDao.countCropProjects(crop.id())))
                 .toList();
     }
 

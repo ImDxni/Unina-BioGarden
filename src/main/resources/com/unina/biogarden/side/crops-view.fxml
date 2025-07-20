@@ -24,8 +24,7 @@
         <columns>
             <JFXTreeTableColumn fx:id="nameCol" text="Nome"/>
             <JFXTreeTableColumn fx:id="growthTimeCol" text="Tempo Maturazione"/>
-            <JFXTreeTableColumn fx:id="seededCol" text="Seminati"/>
-            <JFXTreeTableColumn fx:id="harvestedCol" text="Raccolti"/>
+            <JFXTreeTableColumn fx:id="projectsCol" text="Progetti Attivi"/>
         </columns>
     </JFXTreeTableView>
 </VBox>

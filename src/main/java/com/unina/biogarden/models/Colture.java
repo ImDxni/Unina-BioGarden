@@ -1,6 +1,7 @@
 package com.unina.biogarden.models;
 
 import com.unina.biogarden.enumerations.ColtureStatus;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -108,6 +109,14 @@ public class Colture {
 
             box.setPrefHeight(100);
             box.setPrefWidth(Region.USE_COMPUTED_SIZE);
+
+            Platform.runLater(() -> {
+                double height = box.getPrefHeight();
+                double width = box.prefWidth(-1);
+                if (width < height) {
+                    box.setPrefWidth(height);
+                }
+            });
 
             Label nameLabel = (Label) box.lookup("#coltureNameLabel");
             Label dateStatusLabel = (Label) box.lookup("#coltureDateStatusLabel");

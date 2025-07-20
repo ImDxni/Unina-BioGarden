@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -23,10 +24,19 @@ import java.io.IOException;
 public class MainLayoutController {
 
     @FXML
+    private VBox sideContent;
+    @FXML
     private StackPane mainContent;
 
     @FXML
     private HBox activeItem;
+
+    @FXML
+    public void initialize(){
+        HBox item = (HBox) sideContent.getChildren().get(0);
+        loadPage(item);
+    }
+
 
     /**
      * Cambia la pagina visualizzata nel {@code mainContent} in base all'elemento del menu cliccato.
@@ -36,17 +46,7 @@ public class MainLayoutController {
     public void changePage(MouseEvent mouseEvent) {
         HBox item = getMenuItemFromEvent(mouseEvent);
         if (item != null && !item.equals(activeItem)) {
-            switchActiveItem(item);
-            String fxmlFile = item.getId() + "-view.fxml"; // Assume che l'ID del menu corrisponda al nome del file FXML (es. "projects-view.fxml")
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/unina/biogarden/side/" + fxmlFile));
-                Node newContent = loader.load();
-                mainContent.getChildren().clear();
-                mainContent.getChildren().add(newContent);
-            } catch (Exception e) {
-                System.err.println("Errore durante il caricamento della pagina: " + fxmlFile);
-                e.printStackTrace();
-            }
+            loadPage(item);
         }
     }
 
@@ -120,4 +120,26 @@ public class MainLayoutController {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Carica la pagina corrispondente all'elemento del menu selezionato.
+     * Utilizza il nome dell'ID dell'elemento per determinare il file FXML da caricare.
+     * Rimuove il contenuto precedente e aggiunge il nuovo contenuto al {@code mainContent}.
+     * In caso di errore durante il caricamento, stampa un messaggio di errore.
+     * @param item L'{@code HBox} che rappresenta l'elemento del menu selezionato.
+     */
+    private void loadPage(HBox item) {
+        switchActiveItem(item);
+        String fxmlFile = item.getId() + "-view.fxml"; // Assume che l'ID del menu corrisponda al nome del file FXML (es. "projects-view.fxml")
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/unina/biogarden/side/" + fxmlFile));
+            Node newContent = loader.load();
+            mainContent.getChildren().clear();
+            mainContent.getChildren().add(newContent);
+        } catch (Exception e) {
+            System.err.println("Errore durante il caricamento della pagina: " + fxmlFile);
+            e.printStackTrace();
+        }
+    }
+
 }
