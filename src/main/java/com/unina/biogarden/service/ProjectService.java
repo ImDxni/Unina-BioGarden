@@ -8,6 +8,7 @@ import com.unina.biogarden.dto.activity.ActivityDTO;
 import com.unina.biogarden.dto.activity.HarvestingActivityDTO;
 import com.unina.biogarden.dto.activity.IrrigationActivityDTO;
 import com.unina.biogarden.dto.activity.SeedingActivityDTO;
+import com.unina.biogarden.enumerations.ActivityType;
 import com.unina.biogarden.exceptions.ColtureAlreadyExists;
 import com.unina.biogarden.models.Colture;
 import com.unina.biogarden.models.Crop;
@@ -17,8 +18,10 @@ import com.unina.biogarden.models.activity.Activity;
 import com.unina.biogarden.models.activity.HarvestingActivity;
 import com.unina.biogarden.models.activity.IrrigationActivity;
 import com.unina.biogarden.models.activity.SeedingActivity;
+import com.unina.biogarden.models.report.HarvestReportEntry;
 
-import java.util.Collection;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ProjectService extends AbstractService<ProjectDTO> {
     private final ProjectDAO projectDao = new ProjectDAO();
@@ -228,5 +231,100 @@ public class ProjectService extends AbstractService<ProjectDTO> {
                 .filter(user -> user.id() == farmerId)
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Farmer not found with ID: " + farmerId));
+    }
+
+    public void updateActivity(Activity currentActivity) {
+        ActivityDTO activityDTO;
+        switch (currentActivity.getType()) {
+            case SEEDING -> {
+                SeedingActivity seedingActivity = (SeedingActivity) currentActivity;
+                activityDTO = new SeedingActivityDTO(
+                        currentActivity.getId(),
+                        currentActivity.getDate(),
+                        currentActivity.getStatus(),
+                        seedingActivity.getQuantity(),
+                        seedingActivity.getUnit(),
+                        0, // Colture ID will be set later
+                        0, // Lot ID will be set later
+                        currentActivity.getFarmerID()
+                );
+            }
+            case IRRIGATION -> {
+                activityDTO = new IrrigationActivityDTO(
+                        currentActivity.getId(),
+                        currentActivity.getDate(),
+                        currentActivity.getStatus(),
+                        0, // Colture ID will be set later
+                        0, // Lot ID will be set later
+                        currentActivity.getFarmerID()
+                );
+            }
+            case HARVEST -> {
+                HarvestingActivity harvestingActivity = (HarvestingActivity) currentActivity;
+                activityDTO = new HarvestingActivityDTO(
+                        currentActivity.getId(),
+                        currentActivity.getDate(),
+                        currentActivity.getStatus(),
+                        harvestingActivity.getPlannedQuantity(),
+                        harvestingActivity.getActualQuantity(),
+                        harvestingActivity.getUnit(),
+                        0, // Colture ID will be set later
+                        0, // Lot ID will be set later
+                        currentActivity.getFarmerID()
+                );
+            }
+            default -> throw new IllegalArgumentException("Unsupported activity type: " + currentActivity.getType());
+        }
+
+        activityDAO.updateActivity(activityDTO);
+    }
+
+    public List<HarvestReportEntry> generateHarvestReport(Integer lotId) {
+        List<HarvestReportEntry> reportEntries = new ArrayList<>();
+
+        // Filtra i progetti per lotto se specificato
+        Collection<Project> projectsToConsider = lotId == null ? getProjects() : fetchProjectByLot(new Lot(lotDao.getLotById(lotId)));
+
+
+        for (Project project : projectsToConsider) {
+            for (Colture cultivation : getColtures(project.getId())) {
+                // Filtra le attività di raccolta per questa coltura
+                List<HarvestingActivity> harvestActivities = fetchActivities(cultivation.getId()).stream()
+                        .filter(activity -> activity.getType() == ActivityType.HARVEST)
+                        .map(activity -> (HarvestingActivity) activity)
+                        .toList();
+
+                if (!harvestActivities.isEmpty()) {
+                    int totalHarvests = harvestActivities.size();
+                    double sumQuantities = harvestActivities.stream()
+                            .mapToDouble(HarvestingActivity::getActualQuantity)
+                            .sum();
+                    double avgQuantity = sumQuantities / totalHarvests;
+
+                    Optional<Integer> minQuantity = harvestActivities.stream()
+                            .map(HarvestingActivity::getActualQuantity)
+                            .min(Comparator.naturalOrder());
+
+                    Optional<Integer> maxQuantity = harvestActivities.stream()
+                            .map(HarvestingActivity::getActualQuantity)
+                            .max(Comparator.naturalOrder());
+
+                    // Assumiamo che l'unità di misura sia la stessa per tutte le raccolte di una coltura
+                    // O prendiamo quella della prima attività
+                    String unit = harvestActivities.get(0).getUnit();
+
+                    reportEntries.add(new HarvestReportEntry(
+                            lotDao.getAllLots().stream().filter(l -> lotId == null || l.id() == lotId).findFirst().map(LotDTO::nome).orElse("Multiplo/N/A"), // Gestione nome lotto
+                            cultivation.getCrop().nameProperty().get(),
+                            totalHarvests,
+                            avgQuantity,
+                            minQuantity.orElse(0).doubleValue(), // Gestisce il caso di Optional vuoto
+                            maxQuantity.orElse(0).doubleValue(), // Gestisce il caso di Optional vuoto
+                            unit
+                    ));
+                }
+            }
+        }
+        return reportEntries;
     }
 }

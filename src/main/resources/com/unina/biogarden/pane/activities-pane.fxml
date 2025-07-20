@@ -24,6 +24,7 @@
                style="-fx-border-color: #e0e0e0; -fx-border-radius: 12; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0.5, 0, 2);">
         <columns>
             <TableColumn fx:id="colDate" text="Data" prefWidth="120"/>
+            <TableColumn fx:id="colStatus" text="Status" prefWidth="120"/>
             <TableColumn fx:id="colType" text="Tipo Attività" prefWidth="150"/>
             <TableColumn fx:id="colGrower" text="Coltivatore" prefWidth="150"/> <TableColumn fx:id="colDetails" text="Dettagli" prefWidth="300"/>
             <TableColumn fx:id="colActions" text="Azioni" prefWidth="150"/>

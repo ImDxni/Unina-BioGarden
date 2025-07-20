@@ -8,7 +8,6 @@ import com.unina.biogarden.models.activity.SeedingActivity;
 import com.unina.biogarden.service.ProjectService;
 import com.unina.biogarden.service.UserService;
 import com.unina.biogarden.utils.Utils;
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import javafx.collections.FXCollections;
@@ -20,7 +19,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class CreateActivityFormController extends AbstractForm {
 
@@ -29,7 +27,7 @@ public class CreateActivityFormController extends AbstractForm {
     @FXML
     private JFXComboBox<String> activityTypeComboBox;
     @FXML
-    private JFXComboBox<Farmer> growerComboBox; // NUOVA COMBOBOX PER IL GROWER
+    private JFXComboBox<Farmer> growerComboBox;
     @FXML
     private VBox specificFieldsContainer;
 
@@ -44,10 +42,8 @@ public class CreateActivityFormController extends AbstractForm {
 
     private Colture currentCultivation;
     private Runnable onActivityCreated;
-    private ProjectService projectService = new ProjectService();
+    private final ProjectService projectService = new ProjectService();
     private final UserService userService = new UserService();
-
-    private static final AtomicInteger activityIdCounter = new AtomicInteger(100);
 
     @FXML
     public void initialize() {
@@ -172,7 +168,6 @@ public class CreateActivityFormController extends AbstractForm {
         }
 
         Activity newActivity = null;
-        int newId = activityIdCounter.getAndIncrement();
 
         try {
             switch (activityType) {
@@ -183,10 +178,10 @@ public class CreateActivityFormController extends AbstractForm {
                     }
                     int sowingQuantity = Integer.parseInt(sowingQuantityField.getText());
                     String sowingUnit = sowingUnitField.getText();
-                    newActivity = new SeedingActivity(newId, date, selectedGrower.getId(),selectedGrower.getFullName(),sowingQuantity, sowingUnit); // Passa selectedGrower
+                    newActivity = new SeedingActivity(0, date, selectedGrower.getId(),selectedGrower.getFullName(),sowingQuantity, sowingUnit); // Passa selectedGrower
                     break;
                 case "Irrigazione":
-                    newActivity = new IrrigationActivity(newId, date,selectedGrower.getId(), selectedGrower.getFullName()); // Passa selectedGrower
+                    newActivity = new IrrigationActivity(0, date,selectedGrower.getId(), selectedGrower.getFullName()); // Passa selectedGrower
                     break;
                 case "Raccolta":
                     if (harvestPlannedQuantityField.getText().isEmpty() || harvestActualQuantityField.getText().isEmpty() || harvestUnitField.getText().isEmpty()) {
@@ -196,7 +191,7 @@ public class CreateActivityFormController extends AbstractForm {
                     int planned = Integer.parseInt(harvestPlannedQuantityField.getText());
                     int actual = Integer.parseInt(harvestActualQuantityField.getText());
                     String harvestUnit = harvestUnitField.getText();
-                    newActivity = new HarvestingActivity(newId, date, selectedGrower.getId(),selectedGrower.getFullName(),planned, actual, harvestUnit); // Passa selectedGrower
+                    newActivity = new HarvestingActivity(0, date, selectedGrower.getId(),selectedGrower.getFullName(),planned, actual, harvestUnit); // Passa selectedGrower
                     break;
             }
 

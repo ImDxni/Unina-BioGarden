@@ -19,7 +19,6 @@ public class CreateColtureFormController extends AbstractForm {
     private JFXComboBox<Crop> cropComboBox;
 
     private final ProjectService service = new ProjectService();
-    private final UserService userService = new UserService();
 
     private Project targetProject;
     private Runnable onColtureCreated;

@@ -1,6 +1,8 @@
 package com.unina.biogarden.controller.side;
 
 import com.unina.biogarden.controller.form.CreateActivityFormController;
+import com.unina.biogarden.controller.form.EditActivityFormController;
+import com.unina.biogarden.enumerations.ActivityStatus;
 import com.unina.biogarden.models.activity.Activity;
 import com.unina.biogarden.models.Colture;
 import com.unina.biogarden.service.ProjectService;
@@ -38,6 +40,8 @@ public class CultivationActivitiesController {
     @FXML
     private TableColumn<Activity, LocalDate> colDate;
     @FXML
+    private TableColumn<Activity, String> colStatus;
+    @FXML
     private TableColumn<Activity, String> colType;
     @FXML
     private TableColumn<Activity, String> colDetails;
@@ -71,7 +75,7 @@ public class CultivationActivitiesController {
         colType.setCellValueFactory(cellData -> new SimpleObjectProperty<>(firstCapitalLetter(cellData.getValue().getType().getDescription())));
         colDetails.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getDetails()));
         colGrower.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getFarmer()));
-        // Configura la colonna delle azioni (Modifica, Elimina)
+        colStatus.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getStatus().getLabel()));
         colActions.setCellFactory(param -> new TableCell<Activity, Void>() {
             private final JFXButton editButton = new JFXButton("Modifica");
             private final JFXButton deleteButton = new JFXButton("Elimina");
@@ -134,7 +138,7 @@ public class CultivationActivitiesController {
      * Apre un form per la creazione di una nuova attività.
      */
     @FXML
-    private void handleAddActivity(ActionEvent event) {
+    private void handleAddActivity() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/unina/biogarden/form/activity-form-view.fxml"));
             Parent root = loader.load();
@@ -164,10 +168,25 @@ public class CultivationActivitiesController {
      * @param activity L'attività da modificare.
      */
     private void handleEditActivity(Activity activity) {
-        System.out.println("Modifica attività: " + activity.getType() + " del " + activity.getDate());
-        // Qui implementerai la logica per aprire un form di modifica,
-        // popolandolo con i dati dell'attività e poi aggiornando il servizio/DB.
-        Utils.showAlert(Alert.AlertType.INFORMATION, "Funzionalità in Sviluppo", "La modifica delle attività non è ancora implementata.");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/unina/biogarden/form/update-activity-form.fxml"));
+            Parent root = loader.load();
+            EditActivityFormController controller = loader.getController();
+
+            controller.setActivity(activity); // Passa l'attività al controller del form di modifica
+            controller.setOnActivityUpdated(this::loadActivities); // Imposta la callback per ricaricare la tabella
+
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Modifica Attività: " + activity.getType());
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(activitiesTable.getScene().getWindow());
+            dialogStage.setScene(new Scene(root));
+            dialogStage.showAndWait();
+
+        } catch (IOException e) {
+            Utils.showAlert(Alert.AlertType.ERROR, "Errore caricamento form", "Impossibile caricare il form di modifica attività.");
+            e.printStackTrace();
+        }
     }
 
     /**

@@ -6,13 +6,13 @@ import com.unina.biogarden.enumerations.ActivityType;
 import java.time.LocalDate;
 
 public abstract class Activity {
-    private final int id;
-    private final LocalDate date;
-    private final ActivityType type;
-    private final ActivityStatus status;
+    private int id;
+    private LocalDate date;
+    private ActivityType type;
+    private ActivityStatus status;
 
-    private final int farmerID;
-    private final String farmer;
+    private int farmerID;
+    private String farmer;
 
     public Activity(int id, LocalDate date, ActivityType type, ActivityStatus status, int farmerID, String farmer) {
         this.id = id;
@@ -42,9 +42,36 @@ public abstract class Activity {
         return status;
     }
 
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public void setType(ActivityType type) {
+        this.type = type;
+    }
+
+    public void setStatus(ActivityStatus status) {
+        this.status = status;
+    }
+
+    public void setFarmerID(int farmerID) {
+        this.farmerID = farmerID;
+    }
+
+    public void setFarmer(String farmer) {
+        this.farmer = farmer;
+    }
+
     public String getFarmer() {
         return farmer;
     }
+
+
 
     public abstract String getDetails();
 }

@@ -6,8 +6,8 @@ import com.unina.biogarden.enumerations.ActivityType;
 import java.time.LocalDate;
 
 public class SeedingActivity extends Activity{
-    private final int quantity;
-    private final String unit;
+    private int quantity;
+    private String unit;
 
 
     public SeedingActivity(int id, LocalDate date, ActivityStatus status, int farmerID,String farmer, int quantity, String unit) {
@@ -27,6 +27,13 @@ public class SeedingActivity extends Activity{
 
     public String getUnit() {
         return unit;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 
     @Override

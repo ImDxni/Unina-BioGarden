@@ -128,4 +128,61 @@ public class ActivityDAO {
             throw new RuntimeException("Error fetching activities by lot: " + ex.getMessage(), ex);
         }
     }
+
+    public void updateActivity(ActivityDTO object) {
+        try (Connection conn = dataSource.getConnection()) {
+            CallableStatement stmnt = conn.prepareCall("Call AggiornaAttivita(?,?,?,?,?,?,?,?,?,?)");
+
+            stmnt.setInt(1, object.getId());
+            stmnt.setDate(2, Date.valueOf(object.getDate()));
+
+            PGobject activityStatusObj = new PGobject();
+            activityStatusObj.setType("StatoAttivita");
+            activityStatusObj.setValue(object.getStatus().getStatus().toLowerCase());
+            stmnt.setObject(3, activityStatusObj);
+
+            stmnt.setInt(4, object.getFarmerID());
+
+            PGobject activityTypeObj = new PGobject();
+            activityTypeObj.setType("TipoAttivita");
+            activityTypeObj.setValue(object.getType().getDescription().toLowerCase());
+            stmnt.setObject(5, activityTypeObj);
+
+            switch (object.getType()) {
+                case SEEDING -> {
+                    SeedingActivityDTO seeding = (SeedingActivityDTO) object;
+                    stmnt.setInt(6, seeding.getQuantity());
+                    stmnt.setString(7, seeding.getUnit());
+
+                    // Raccolta → null
+                    stmnt.setNull(8, Types.INTEGER);
+                    stmnt.setNull(9, Types.INTEGER);
+                    stmnt.setNull(10, Types.VARCHAR);
+                }
+                case HARVEST -> {
+                    HarvestingActivityDTO harvest = (HarvestingActivityDTO) object;
+                    stmnt.setNull(6, Types.INTEGER);
+                    stmnt.setNull(7, Types.VARCHAR);
+
+                    stmnt.setInt(8, harvest.getExpectedQuantity());
+                    stmnt.setInt(9, harvest.getActualQuantity());
+                    stmnt.setString(10, harvest.getUnit());
+                }
+                case IRRIGATION -> {
+                    // Tutti i campi specifici sono nulli
+                    stmnt.setNull(6, Types.INTEGER);
+                    stmnt.setNull(7, Types.VARCHAR);
+                    stmnt.setNull(8, Types.INTEGER);
+                    stmnt.setNull(9, Types.INTEGER);
+                    stmnt.setNull(10, Types.VARCHAR);
+                }
+                default -> throw new IllegalArgumentException("Tipo attività non supportato: " + object.getType());
+            }
+
+            stmnt.executeUpdate();
+        } catch (SQLException ex) {
+            throw new RuntimeException("Errore durante l'aggiornamento dell'attività: " + ex.getMessage(), ex);
+        }
+    }
+
 }

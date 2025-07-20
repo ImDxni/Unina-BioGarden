@@ -29,7 +29,7 @@
 
                 <!-- Menu Items -->
                 <VBox spacing="10">
-                    <HBox onMouseClicked="#changePage" spacing="12" styleClass="menu-item">
+                    <HBox fx:id="dashboard" onMouseClicked="#changePage" spacing="12" styleClass="menu-item">
                         <ImageView fitHeight="22" fitWidth="22">
                             <image>
                                 <Image url="@icons/home.png" />
@@ -60,6 +60,14 @@
                             </image>
                         </ImageView>
                         <Label styleClass="menu-label" text="Colture" />
+                    </HBox>
+                    <HBox fx:id="activities" onMouseClicked="#changePage" spacing="12" styleClass="menu-item">
+                        <ImageView fitHeight="22" fitWidth="22">
+                            <image>
+                                <Image url="@icons/tasks.png" />
+                            </image>
+                        </ImageView>
+                        <Label styleClass="menu-label" text="Attività" />
                     </HBox>
                 </VBox>
             </VBox>
