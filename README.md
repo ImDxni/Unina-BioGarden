@@ -25,7 +25,7 @@ Questo design è supportato dal pattern **Entity-Control-Boundary (ECB)**, che c
 
 ### 1. Modelli (`com.unina.biogarden.models`)
 
-Questa sezione definisce le entità principali del dominio dell'applicazione. Sono classi POJO (Plain Old Java Object) che rappresentano i dati e le loro relazioni, come:
+Questa sezione definisce le entità principali del dominio dell'applicazione. Sono classi che rappresentano i dati e le loro relazioni,e espongono ai controller i dati essenziali per la visualizzazione grafica come:
 
 * **`Activity` (e sottoclassi: `HarvestingActivity`, `IrrigationActivity`, `SeedingActivity`):** Rappresentano le diverse operazioni che possono essere eseguite su una coltura.
 * **`Colture`:** Dettagli su una specifica coltivazione.
